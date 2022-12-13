@@ -1,5 +1,5 @@
-import { Heatmap } from '../model/Heatmap';
-import { IParams, ITransistorSoft } from '../interfaces/Heatmap';
+import { Heatmap } from '../model/PaymentTx';
+import { IParams, ITransistorSoft } from '../interfaces/PaymentTx';
 import * as moment from 'moment-timezone'
 
 class HeatmapDao {

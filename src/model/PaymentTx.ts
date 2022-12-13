@@ -1,5 +1,5 @@
 import { Model, model, Schema } from "mongoose";
-import { IHeatmap } from "../interfaces/Heatmap";
+import { IHeatmap } from "../interfaces/PaymentTx";
 
 const HeatmapSchema = Schema(
   {

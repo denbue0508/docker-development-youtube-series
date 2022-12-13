@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import heatmapDao from '../dao/Heatmap';
-import { ITransistorSoft, ILocation } from '../interfaces/Heatmap';
+import { ITransistorSoft, ILocation } from '../interfaces/PaymentTx';
 import * as moment from 'moment-timezone'
 import RidersDao from '../dao/Riders';
 import { IDevice } from '../interfaces/Device';
