@@ -6,6 +6,6 @@ const controller = new Controller();
 
 payment.post('/', controller.create);
 
-payment.get('/', controller.get);
+// payment.get('/', controller.get);
 
 export default payment;

@@ -9,4 +9,5 @@ export const v1: Router = Router();
 v1.use(verifyToken);
 
 v1.use('/payment', payment);
-v1.use('/device', device);
+v1.use('/refund', payment);
+// v1.use('/device', device);

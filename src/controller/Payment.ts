@@ -1,39 +1,42 @@
 import { Request, Response } from 'express';
-import heatmapDao from '../dao/Heatmap';
-import { ITransistorSoft, ILocation } from '../interfaces/PaymentTx';
-import * as moment from 'moment-timezone'
-import RidersDao from '../dao/Riders';
-import { IDevice } from '../interfaces/Device';
-import DeviceDao from '../dao/Device';
+// import heatmapDao from '../dao/Heatmap';
+// import { ITransistorSoft, ILocation } from '../interfaces/PaymentTx';
+// import * as moment from 'moment-timezone'
+// import RidersDao from '../dao/Riders';
+// import { IDevice } from '../interfaces/Device';
+// import DeviceDao from '../dao/Device';
 
 class Heatmap {
-  public create = async (req: Request, res: Response): Promise<any> => {
+  public  create = async (req: Request, res: Response): Promise<any> => {
     try {
-      if (!req.body || !req.body.location || !req.body.rider_id || !req.body.client_id
-        || !req.body.hub_id) throw ReferenceError("Invalid Parameter");
+      console.log('req: ', req)
 
-      if (req.body.location.length == 0)
-        return res.status(200).send({ success: true, message: "Ignored" });
+      
+      // if (!req.body || !req.body.location || !req.body.rider_id || !req.body.client_id
+      //   || !req.body.hub_id) throw ReferenceError("Invalid Parameter");
 
-      this.updateRiderCurrentLocation(req.body);
-      this.logDeviceHealth({
-        client_id: req.body.client_id,
-        hub_id: req.body.hub_id,
-        rider_id: req.body.rider_id,
-      }, req.body.location);
+      // if (req.body.location.length == 0)
+      //   return res.status(200).send({ success: true, message: "Ignored" });
 
-      const heatmapDAO: heatmapDao = new heatmapDao();
-      const heatmaps = this.sortHeatmaps(req.body);
-      if (heatmaps.length == 0) return res.status(200).send({ success: true, message: "Ignored" });
+      // this.updateRiderCurrentLocation(req.body);
+      // this.logDeviceHealth({
+      //   client_id: req.body.client_id,
+      //   hub_id: req.body.hub_id,
+      //   rider_id: req.body.rider_id,
+      // }, req.body.location);
 
-      heatmaps.forEach(heatmap => {
-        heatmap.lasttimestamp = heatmap.location[heatmap.location.length - 1].timestamp;
-        heatmapDAO.saveOrUpdate(heatmap);
-      });
+      // const heatmapDAO: heatmapDao = new heatmapDao();
+      // const heatmaps = this.sortHeatmaps(req.body);
+      // if (heatmaps.length == 0) return res.status(200).send({ success: true, message: "Ignored" });
+
+      // heatmaps.forEach(heatmap => {
+      //   heatmap.lasttimestamp = heatmap.location[heatmap.location.length - 1].timestamp;
+      //   heatmapDAO.saveOrUpdate(heatmap);
+      // });
 
       res.status(200).send({
         success: true,
-        message: 'Heatmap recorded'
+        message: 'Hello recorded'
       });
     } catch (err) {
       res.status(err instanceof ReferenceError ? 400 : 500).send({
@@ -43,118 +46,118 @@ class Heatmap {
     }
   }
 
-  private sortHeatmaps(obj) {
-    const jobIds = new Set<string>();
-    obj.location.forEach(item => item.extras && item.extras.job_ids.length > 0 && item.extras.job_ids.forEach(id => jobIds.add(id)));
-    const heatMaps = new Array<ITransistorSoft>();
+  // private sortHeatmaps(obj) {
+  //   const jobIds = new Set<string>();
+  //   obj.location.forEach(item => item.extras && item.extras.job_ids.length > 0 && item.extras.job_ids.forEach(id => jobIds.add(id)));
+  //   const heatMaps = new Array<ITransistorSoft>();
 
-    jobIds.forEach(jobId => {
-      heatMaps.push({
-        job_id: jobId,
-        rider_id: obj.rider_id,
-        client_id: obj.client_id,
-        hub_id: obj.hub_id,
-        location: obj.location.filter(location => location.extras.job_ids.indexOf(jobId) > -1),
-        lasttimestamp: null
-      })
-    });
+  //   jobIds.forEach(jobId => {
+  //     heatMaps.push({
+  //       job_id: jobId,
+  //       rider_id: obj.rider_id,
+  //       client_id: obj.client_id,
+  //       hub_id: obj.hub_id,
+  //       location: obj.location.filter(location => location.extras.job_ids.indexOf(jobId) > -1),
+  //       lasttimestamp: null
+  //     })
+  //   });
 
-    const jobIdsInOtherHubs = new Array<any>();
-    // handle Other job ids
-    obj.location.forEach((item: ILocation )=> {
+  //   const jobIdsInOtherHubs = new Array<any>();
+  //   // handle Other job ids
+  //   obj.location.forEach((item: ILocation )=> {
 
-      if(item.extras && item.extras.otherJobIds) {
-        const otherJobIds = item.extras.otherJobIds
-        for (const hubId in otherJobIds) {
-          const jobIdsInHub = otherJobIds[hubId] || []
+  //     if(item.extras && item.extras.otherJobIds) {
+  //       const otherJobIds = item.extras.otherJobIds
+  //       for (const hubId in otherJobIds) {
+  //         const jobIdsInHub = otherJobIds[hubId] || []
 
-          jobIdsInHub.forEach(jobId => {
-            if(!jobIdsInOtherHubs.includes(jobId)) {
-              heatMaps.push({
-                job_id: jobId,
-                rider_id: obj.rider_id,
-                client_id: obj.client_id,
-                hub_id: hubId,
-                location: [item],
-                lasttimestamp: null
-              })
-              jobIdsInOtherHubs.push(jobId)
-            }
-          })
-        }
-      }
-    });
+  //         jobIdsInHub.forEach(jobId => {
+  //           if(!jobIdsInOtherHubs.includes(jobId)) {
+  //             heatMaps.push({
+  //               job_id: jobId,
+  //               rider_id: obj.rider_id,
+  //               client_id: obj.client_id,
+  //               hub_id: hubId,
+  //               location: [item],
+  //               lasttimestamp: null
+  //             })
+  //             jobIdsInOtherHubs.push(jobId)
+  //           }
+  //         })
+  //       }
+  //     }
+  //   });
 
-    return heatMaps;
-  }
+  //   return heatMaps;
+  // }
 
-  private logDeviceHealth = (info, locations) => {
-    const listOfDeviceLogs: Array<IDevice> = new Array<IDevice>();
+  // private logDeviceHealth = (info, locations) => {
+  //   const listOfDeviceLogs: Array<IDevice> = new Array<IDevice>();
 
-    locations.forEach((location: ILocation) => {
-      let log: IDevice = {
-        job_ids: location.extras.job_ids,
-        client_id: info.client_id,
-        hub_id: info.hub_id,
-        rider_id: info.rider_id,
-        location_provider: location.extras.locationProvider,
-        power_state: location.extras.powerState,
-        app_version: location.extras.appVersion,
-        api_level: location.extras.apiLevel,
-        connection_type: location.extras.connectionType,
-        android_version: location.extras.androidVersion,
-        device_name: location.extras.deviceName,
-        free_storage: location.extras.freeStorage,
-        max_memory: location.extras.maxMemory,
-        transaction_date: moment(location.timestamp).toDate()
-      }
+  //   locations.forEach((location: ILocation) => {
+  //     let log: IDevice = {
+  //       job_ids: location.extras.job_ids,
+  //       client_id: info.client_id,
+  //       hub_id: info.hub_id,
+  //       rider_id: info.rider_id,
+  //       location_provider: location.extras.locationProvider,
+  //       power_state: location.extras.powerState,
+  //       app_version: location.extras.appVersion,
+  //       api_level: location.extras.apiLevel,
+  //       connection_type: location.extras.connectionType,
+  //       android_version: location.extras.androidVersion,
+  //       device_name: location.extras.deviceName,
+  //       free_storage: location.extras.freeStorage,
+  //       max_memory: location.extras.maxMemory,
+  //       transaction_date: moment(location.timestamp).toDate()
+  //     }
 
-      listOfDeviceLogs.push(log);
-    })
+  //     listOfDeviceLogs.push(log);
+  //   })
 
-    DeviceDao.saveItems(listOfDeviceLogs);
-  }
+  //   DeviceDao.saveItems(listOfDeviceLogs);
+  // }
 
   /**
    * This will update the current location of the rider
    * in parallel of saving heatmap
    */
-  private updateRiderCurrentLocation = (rider) => {
-    const lastIndex = rider.location.length - 1;
+  // private updateRiderCurrentLocation = (rider) => {
+  //   const lastIndex = rider.location.length - 1;
 
-    RidersDao.updateRiderLocation({
-      clientId: rider.client_id,
-      riderId: rider.rider_id,
-      ...rider.location[lastIndex].coords,
-      lastTimeStamp: moment().valueOf()
-    })
-  }
+  //   RidersDao.updateRiderLocation({
+  //     clientId: rider.client_id,
+  //     riderId: rider.rider_id,
+  //     ...rider.location[lastIndex].coords,
+  //     lastTimeStamp: moment().valueOf()
+  //   })
+  // }
 
-  public get = async (req: Request, res: Response): Promise<any> => {
-    try {
+  // public get = async (req: Request, res: Response): Promise<any> => {
+  //   try {
 
-      if ((!req.query.from && !req.query.to)
-        || !req.query.riderId || !req.query.clientId
-        || !req.query.hubId
-        || (!moment(req.query.from, 'MM-DD-YYYY').isValid()
-          || !moment(req.query.to, 'MM-DD-YYYY').isValid())) throw ReferenceError("Invalid Parameter");
+  //     if ((!req.query.from && !req.query.to)
+  //       || !req.query.riderId || !req.query.clientId
+  //       || !req.query.hubId
+  //       || (!moment(req.query.from, 'MM-DD-YYYY').isValid()
+  //         || !moment(req.query.to, 'MM-DD-YYYY').isValid())) throw ReferenceError("Invalid Parameter");
 
-      const matrix: heatmapDao = new heatmapDao();
-      const data = await matrix.getHeatmap({
-        ...req.query
-      });
+  //     const matrix: heatmapDao = new heatmapDao();
+  //     const data = await matrix.getHeatmap({
+  //       ...req.query
+  //     });
 
-      res.status(200).send({
-        success: true,
-        data
-      });
-    } catch (err) {
-      res.status(err instanceof ReferenceError ? 400 : 500).send({
-        success: false,
-        message: err.message
-      });
-    }
-  }
+  //     res.status(200).send({
+  //       success: true,
+  //       data
+  //     });
+  //   } catch (err) {
+  //     res.status(err instanceof ReferenceError ? 400 : 500).send({
+  //       success: false,
+  //       message: err.message
+  //     });
+  //   }
+  // }
 }
 
 export default Heatmap;
