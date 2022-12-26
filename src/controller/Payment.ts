@@ -1,17 +1,72 @@
 import { Request, Response } from 'express';
-// import heatmapDao from '../dao/Heatmap';
+import PaymentLogDao from '../dao/PaymentLog';
+import PaymentDao from '../dao/Payment';
 // import { ITransistorSoft, ILocation } from '../interfaces/PaymentTx';
 // import * as moment from 'moment-timezone'
 // import RidersDao from '../dao/Riders';
 // import { IDevice } from '../interfaces/Device';
 // import DeviceDao from '../dao/Device';
 
-class Heatmap {
-  public  create = async (req: Request, res: Response): Promise<any> => {
+class Payment {
+  public notify = async (req: Request, res: Response): Promise<any> => {
+    try {
+
+      if (!req.body || !req.body.partnerId || !req.body.paymentId || !req.body.paymentRequestId
+        || !req.body.paymentAmount || !req.body.paymentTime || !req.body.paymentStatus) throw ReferenceError("Invalid Parameters");
+
+      const paymentLog: PaymentLogDao = new PaymentLogDao()
+      const payment: PaymentDao = new PaymentDao()
+
+      await paymentLog.saveItem(req.body)
+      await payment.updateStatus({ payment_id: req.body.paymentId }, req.body.paymentStatus)
+
+      res.status(200).send({
+        result: {
+          resultCode: "SUCCESS",
+          resultStatus: "S",
+          resultMessage: "sucess"
+        }
+      })
+
+    } catch (err) {
+      const referenceError = err instanceof ReferenceError ? 400 : 500;
+      res.status(err instanceof ReferenceError ? 400 : 500).send({
+        result: {
+          resultCode: referenceError ? "UNKNOWN_EXCEPTION" : "PROCESS_FAIL",
+          resultStatus: referenceError ? "An API calling is failed, which is caused by unknown reasons." : "A general business failure occurred. Don't retry.",
+          resultMessage: err.message
+        }
+      });
+    }
+  }
+
+  public get = async (req: Request, res: Response): Promise<any> => {
+    try {
+
+      if (!req.query || !req.query.partnerId || !req.query.paymentRequestId) throw ReferenceError("Invalid Parameters");
+
+      const payment: PaymentDao = new PaymentDao()
+
+      const data = await payment.getTransactions(req.body)
+
+      res.status(200).send({
+        success: true,
+        data: data
+      })
+
+    } catch (err) {
+      res.status(err instanceof ReferenceError ? 400 : 500).send({
+        success: false,
+        message: err.message
+      });
+    }
+  }
+
+  public create = async (req: Request, res: Response): Promise<any> => {
     try {
       console.log('req: ', req)
 
-      
+
       // if (!req.body || !req.body.location || !req.body.rider_id || !req.body.client_id
       //   || !req.body.hub_id) throw ReferenceError("Invalid Parameter");
 
@@ -160,4 +215,4 @@ class Heatmap {
   // }
 }
 
-export default Heatmap;
+export default Payment;
