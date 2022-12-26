@@ -6,11 +6,11 @@ export interface IPaymentTx {
     paymentTime: string,
     paymentFailReason: string,
     paymentRequestId: string,
-    paymentAmount: PaymentAmount,
+    paymentAmount: IPaymentAmount,
     paymentStatus: string
 }
 
-interface PaymentAmount { 
+export interface IPaymentAmount { 
     currency: string,
     value: string
 }
@@ -19,7 +19,7 @@ export interface IPaymentLog {
     partnerId: string,
     paymentId: string,
     paymentRequestId: string,
-    paymentAmount: PaymentAmount,
+    paymentAmount: IPaymentAmount,
     paymentTime: string,
     paymentStatus: string,
     paymentFailReason: string
@@ -29,7 +29,7 @@ export interface INotifyParams {
     partnerId: string, 
     paymentId: string, 
     paymentRequestId: string, 
-    paymentAmount: PaymentAmount,
+    paymentAmount: IPaymentAmount,
     paymentStatus: string,
     paymentFailReason?: string
 }
