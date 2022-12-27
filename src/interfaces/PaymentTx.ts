@@ -1,6 +1,6 @@
 export interface IPaymentTx {
     orderId: string,
-    paymentId: string,
+    paymentId?: string,
     partnerId: string,
     appId: string,
     paymentTime: string,
@@ -17,7 +17,7 @@ export interface IPaymentAmount {
 
 export interface IPaymentLog { 
     partnerId: string,
-    paymentId: string,
+    paymentId?: string,
     paymentRequestId: string,
     paymentAmount: IPaymentAmount,
     paymentTime: string,
@@ -27,7 +27,7 @@ export interface IPaymentLog {
 
 export interface INotifyParams { 
     partnerId: string, 
-    paymentId: string, 
+    paymentId?: string, 
     paymentRequestId: string, 
     paymentAmount: IPaymentAmount,
     paymentStatus: string,

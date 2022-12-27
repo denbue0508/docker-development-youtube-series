@@ -6,6 +6,12 @@ import PaymentDao from '../dao/Payment';
 // import RidersDao from '../dao/Riders';
 // import { IDevice } from '../interfaces/Device';
 // import DeviceDao from '../dao/Device';
+import Cryptr from '../helpers/Crypto'
+import CONFIG from '../config/config';
+import * as moment from 'moment-timezone'
+import { IPaymentLog } from '../interfaces/PaymentTx';
+
+import Gcash from '../service/Gcash';
 
 class Payment {
   public notify = async (req: Request, res: Response): Promise<any> => {
@@ -66,28 +72,60 @@ class Payment {
     try {
       console.log('req: ', req)
 
+      const cyTest = Cryptr.cipher('')('1672134427484Fi8EqFRpLw3R5ApYc4qs')
+      console.log('cyTest: ', cyTest )
+      const deciTest = Cryptr.decipher('')(cyTest)
+      console.log('deciTest: ', deciTest )
 
-      // if (!req.body || !req.body.location || !req.body.rider_id || !req.body.client_id
-      //   || !req.body.hub_id) throw ReferenceError("Invalid Parameter");
+      if (!req.body || !req.body.orderId || !req.body.refNo || !req.body.paymentAmount
+        || !req.body.customerName) throw ReferenceError("Invalid Parameter");
 
-      // if (req.body.location.length == 0)
-      //   return res.status(200).send({ success: true, message: "Ignored" });
+      
 
-      // this.updateRiderCurrentLocation(req.body);
-      // this.logDeviceHealth({
-      //   client_id: req.body.client_id,
-      //   hub_id: req.body.hub_id,
-      //   rider_id: req.body.rider_id,
-      // }, req.body.location);
+      const paymentLog: PaymentLogDao = new PaymentLogDao()
+      const payment: PaymentDao = new PaymentDao()  
 
-      // const heatmapDAO: heatmapDao = new heatmapDao();
-      // const heatmaps = this.sortHeatmaps(req.body);
-      // if (heatmaps.length == 0) return res.status(200).send({ success: true, message: "Ignored" });
+      const paymentLogObj: IPaymentLog = {
+        partnerId: CONFIG.PARTNER_ID,
+        paymentId: '',
+        paymentRequestId: `${moment().valueOf()}${req.body.orderId}`,
+        paymentAmount: req.body.paymentAmount,
+        paymentTime: moment().format('YYYY-MM-DDTHH:mm:ss'),
+        paymentStatus: 'INITIATED',
+        paymentFailReason: '',
+      }
 
-      // heatmaps.forEach(heatmap => {
-      //   heatmap.lasttimestamp = heatmap.location[heatmap.location.length - 1].timestamp;
-      //   heatmapDAO.saveOrUpdate(heatmap);
-      // });
+      const paymentTx = {
+        orderId: req.body.refNo,
+        partnerId: CONFIG.PARTNER_ID,
+        paymentId: '',
+        appId: CONFIG.APP_ID,
+        paymentTime: moment().format('YYYY-MM-DDTHH:mm:ss'),
+        paymentFailReason: '',
+        paymentRequestId: `${moment().valueOf()}${req.body.orderId}`, // custom generated id
+        paymentAmount: req.body.paymentAmount,
+        paymentStatus: 'INITIATED'
+      }
+
+      await paymentLog.saveItem(paymentLogObj)
+      await payment.saveItem(paymentTx) // saveItem
+      
+
+      const result = await Gcash.gcashPay({
+        partnerId: CONFIG.PARTNER_ID,
+        appId: CONFIG.APP_ID,
+        paymentRequestId: "2019112719074101000700000077771xxxx",
+        paymentOrderTitle: req.body.refNo,
+        paymentAmount: req.body.paymentAmount,
+        paymentReturnUrl: "https://staging.myparcels.ph/return",
+        paymentNotifyUrl: "https://www.merchant.com/paymentNotifyxxx",
+      });
+
+      res.status(200);
+      res.json({
+          success: true,
+          result
+      });
 
       res.status(200).send({
         success: true,
