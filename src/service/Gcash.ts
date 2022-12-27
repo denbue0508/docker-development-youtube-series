@@ -3,7 +3,7 @@ import { getGcashHeader, getGcashInquiryHeader } from '../helpers/setHeaders'
 import axios from 'axios'
 
 class Gcash {
-    public static async getAuthorization(grantCode: string) {
+    public static getAuthorization = async (grantCode: string) => {
         const headers = getGcashHeader(
             '2022112511150000031704',
             '/v1/authorizations/applyToken.htm',
@@ -50,9 +50,9 @@ class Gcash {
     }
 
     public static inquiryUserInfo = async (authCode: string) => {
-        const authorization = await Gcash.getAuthorization(authCode)
+        const authorization = await this.getAuthorization(authCode)
         console.log('authorization dao', authorization.data)
-        const token = authorization.data.accessToken
+        const token = '20221221dCerX8d632xW31Pu2c4iexaW6Xy9SO5xoEezaSvkgcc0886300145733'
         console.log('dao token', token)
         const headers = getGcashInquiryHeader(
             '2022112511150000031704',

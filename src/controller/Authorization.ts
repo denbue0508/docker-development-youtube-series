@@ -1,27 +1,27 @@
 import { Request, Response } from 'express';
-import GCashSvc from '../service/Gcash';
+import GCashImpl from '../impl/Authorization';
 
 class Authorization {
     public async applyToken(req: Request, res: Response): Promise<void> {
-        // try {
-        const { authCode } = req.body;
-        const result = await GCashSvc.inquiryUserInfo(authCode);
-        res.status(200);
-        res.json({
-            success: true,
-            result
-        });
-        // } catch (error) {
-        //     const message = error?.response?.data?.message || error.message;
-        //     console.log('GCash Authorization Failed', {
-        //         message,
-        //         err: error?.response?.data || error
-        //     });
-        //     res.status(400).json({
-        //         sucess: false,
-        //         message
-        //     });
-        // }
+        try {
+            const { authCode } = req.body;
+            const result = await GCashImpl.applyToken(authCode);
+            res.status(200);
+            res.json({
+                success: true,
+                result
+            });
+        } catch (error) {
+            const message = error?.response?.data?.message || error.message;
+            console.log('GCash Authorization Failed', {
+                message,
+                err: error?.response?.data || error
+            });
+            res.status(400).json({
+                sucess: false,
+                message
+            });
+        }
     }
 
     // private sortHeatmaps(obj) {

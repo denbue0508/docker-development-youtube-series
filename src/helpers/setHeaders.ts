@@ -5,6 +5,8 @@
 const rs = require('jsrsasign'); //sample rsa-js library, you can use other or if you have your own rsa library
 const moment = require('moment'); //moment library
 
+// import rs from 'jsrsasign'
+
 export const getGcashHeader = (
     clientId: string,
     urlString: string,
