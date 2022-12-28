@@ -1,9 +1,30 @@
 import { Request, Response } from 'express';
 import GCashImpl from '../impl/Authorization';
+import { validateAuthorization } from '../validations/Authorization';
 
 class Authorization {
     public async applyToken(req: Request, res: Response): Promise<void> {
         try {
+            const { error: schemaErr } = validateAuthorization(req.body)
+            if (schemaErr) {
+                console.log(
+                    'Pandago Create Order Failed',
+                    JSON.stringify(
+                        {
+                            message: 'Invalid Request Field',
+                            err: schemaErr.details
+                        },
+                        null,
+                        2
+                    )
+                )
+
+                res.status(422).json({
+                    sucess: false,
+                    message: 'Invalid Request Field',
+                    errors: schemaErr.details
+                });
+            }
             const { authCode } = req.body;
             const result = await GCashImpl.applyToken(authCode);
             res.status(200);

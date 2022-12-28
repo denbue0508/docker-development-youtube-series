@@ -1,6 +1,6 @@
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
-import * as express from 'express';
+import express from 'express';
 import * as helmet from 'helmet';
 import * as morgan from 'morgan';
 import { v1 } from './routes/index';
