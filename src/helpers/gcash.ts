@@ -7,6 +7,13 @@ const moment = require('moment'); //moment library
 
 // import rs from 'jsrsasign'
 
+export const getSignature = (data) => {
+
+    //TODO to implement get signature as general
+    // 'Signature: algorithm=<algorithm>, keyVersion=<key-version>, signature=<generatedSignature>'
+    return "";
+}
+
 export const getGcashHeader = (
     clientId: string,
     urlString: string,
