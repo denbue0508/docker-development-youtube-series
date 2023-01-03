@@ -5,6 +5,7 @@ const authorization: Router = Router();
 const controller = new Controller();
 
 authorization.post('/', controller.applyToken);
+authorization.post('/auth', controller.payment)
 
 // payment.get('/', controller.get);
 

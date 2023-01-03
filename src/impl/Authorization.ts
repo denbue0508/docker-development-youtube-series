@@ -12,6 +12,12 @@ class Authorization {
         const result = await GCashSvc.inquiryUserInfo(accessToken)
         return result.data
     }
+
+    public static gcashPayment = async (payload: any) => {
+        console.log('hello token')
+        const result = await GCashSvc.payment(payload)
+        return result.data
+    }
 }
 
 export default Authorization

@@ -9,7 +9,7 @@ export const validateAuthorization = (data: unknown) =>
         data,
         schema: Joi.object<IAuthorizationParams>()
             .keys({
-                authToken: Joi.string().min(0).required()
+                authCode: Joi.string().min(0).required()
             })
             .required()
     })

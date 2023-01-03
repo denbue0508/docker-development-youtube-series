@@ -1,3 +1,3 @@
 export interface IAuthorizationParams {
-    authToken: string
+    authCode: string
 }

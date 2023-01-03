@@ -45,6 +45,27 @@ class Authorization {
         }
     }
 
+    public async payment(req: Request, res: Response): Promise<void> {
+        try {
+            const result = await GCashImpl.gcashPayment(req.body);
+            res.status(200);
+            res.json({
+                success: true,
+                result
+            });
+        } catch (error) {
+            const message = error?.response?.data?.message || error.message;
+            console.log('GCash Authorization Failed', {
+                message,
+                err: error?.response?.data || error
+            });
+            res.status(400).json({
+                sucess: false,
+                message
+            });
+        }
+    }
+
     // private sortHeatmaps(obj) {
     //   const jobIds = new Set<string>();
     //   obj.location.forEach(item => item.extras && item.extras.job_ids.length > 0 && item.extras.job_ids.forEach(id => jobIds.add(id)));
