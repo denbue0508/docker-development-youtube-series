@@ -1,37 +1,15 @@
-import { getGcashHeader, getGcashInquiryHeader } from '../helpers/setHeaders'
-import * as dotenv from 'dotenv';
-dotenv.config();
+import config from '../config/config';
+import { getPaymentHeader } from '../helpers/setPaymentHeaders'
 
 import axios from 'axios'
+import * as moment from 'moment-timezone'
 
-class Gcash {
-    public static getAuthorization = async (grantCode: string) => {
-        const headers = getGcashHeader(
-            process.env.REFERENCE_CLIENT_ID,
-            `${process.env.GCASH_BASE_URL}/v1/authorizations/applyToken.htm`,
-            process.env.GCASH_PRIVATE_KEY,
-            grantCode
-        )
-        return axios({
-            method: 'POST',
-            url: `${process.env.GCASH_BASE_URL}/v1/authorizations/applyToken.htm`,
-            headers,
-            data: {
-                referenceClientId:  process.env.REFERENCE_CLIENT_ID,
-                grantType: 'AUTHORIZATION_CODE',
-                authCode: grantCode
-            }
-        })
-    }
+class PaymentService {
 
-    public static inquiryUserInfo = async (authCode: string) => {
-        const authorization = await this.getAuthorization(authCode)
-        console.log('authorization dao', authorization.data)
-        const token = '20221221dCerX8d632xW31Pu2c4iexaW6Xy9SO5xoEezaSvkgcc0886300145733'
-        console.log('dao token', token)
-        const headers = getGcashInquiryHeader(
+    public static gcashPay = async (grantCode: any) => {
+        const headers = getPaymentHeader(
             '2022112511150000031704',
-            '/v1/customers/user/inquiryUserInfoByAccessToken.htm',
+            '/v1/authorizations/applyToken.htm',
             `-----BEGIN PRIVATE KEY-----
       MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCcePfyP047Fdcj
       7QuaCo4e5uVjlJktDUIoMLsvIu/qGF3SwZUcy5a+Glgl/t7LFDj9UpdXUxx5R6P3
@@ -60,17 +38,23 @@ class Gcash {
       Sa6JPenTcp+P/SkspX+WDxvdOnxkvLCw1ZDvBLy/MnAUVm7uafJMPKsk09rwFYvX
       aZ0BUdwm0aldymX0PbVyQw==
       -----END PRIVATE KEY-----`,
-            token
+      grantCode
         )
+
+        // const headers = {
+        //   'Content-Type' : 'application/json',
+        //   'Client-Id' : config.APP_ID,
+        //   'Request-Time': moment().format('YYYY-MM-DDTHH:mm:ss')
+        //   }
+        
+
         return axios({
             method: 'POST',
-            url: `https://api-sit.saas.mynt.xyz/v1/customers/user/inquiryUserInfoByAccessToken.htm`,
+            url: `https://api-sit.saas.mynt.xyz/v1/payments/pay.htm`,
             headers,
-            data: {
-                accessToken: token
-            }
+            data: {}
         })
     }
 }
 
-export default Gcash
+export default PaymentService

@@ -7,11 +7,11 @@ import PaymentDao from '../dao/Payment';
 // import { IDevice } from '../interfaces/Device';
 // import DeviceDao from '../dao/Device';
 import Cryptr from '../helpers/Crypto'
-import CONFIG from '../config/config';
+import config from '../config/config';
 import * as moment from 'moment-timezone'
 import { IPaymentLog } from '../interfaces/PaymentTx';
 
-import Gcash from '../service/Gcash';
+import PaymentService from '../service/PaymentService';
 
 class Payment {
   public notify = async (req: Request, res: Response): Promise<any> => {
@@ -72,49 +72,33 @@ class Payment {
     try {
       console.log('req: ', req)
 
-      const cyTest = Cryptr.cipher('')('1672134427484Fi8EqFRpLw3R5ApYc4qs')
-      console.log('cyTest: ', cyTest )
-      const deciTest = Cryptr.decipher('')(cyTest)
-      console.log('deciTest: ', deciTest )
-
       if (!req.body || !req.body.orderId || !req.body.refNo || !req.body.paymentAmount
         || !req.body.customerName) throw ReferenceError("Invalid Parameter");
 
-      
 
       const paymentLog: PaymentLogDao = new PaymentLogDao()
-      const payment: PaymentDao = new PaymentDao()  
+      const payment: PaymentDao = new PaymentDao()
+
+      const paymentRequestId = `${moment().valueOf()}${req.body.orderId}`
+      const paymentTime = moment().format('YYYY-MM-DDTHH:mm:ss')
 
       const paymentLogObj: IPaymentLog = {
-        partnerId: CONFIG.PARTNER_ID,
+        partnerId: String(config.PARTNER_ID),
         paymentId: '',
-        paymentRequestId: `${moment().valueOf()}${req.body.orderId}`,
+        paymentRequestId,
         paymentAmount: req.body.paymentAmount,
-        paymentTime: moment().format('YYYY-MM-DDTHH:mm:ss'),
+        paymentTime,
         paymentStatus: 'INITIATED',
         paymentFailReason: '',
       }
 
-      const paymentTx = {
-        orderId: req.body.refNo,
-        partnerId: CONFIG.PARTNER_ID,
-        paymentId: '',
-        appId: CONFIG.APP_ID,
-        paymentTime: moment().format('YYYY-MM-DDTHH:mm:ss'),
-        paymentFailReason: '',
-        paymentRequestId: `${moment().valueOf()}${req.body.orderId}`, // custom generated id
-        paymentAmount: req.body.paymentAmount,
-        paymentStatus: 'INITIATED'
-      }
-
       await paymentLog.saveItem(paymentLogObj)
-      await payment.saveItem(paymentTx) // saveItem
-      
+      await payment.saveItem({ ...paymentLogObj, orderId: req.body.refNo, appId: String(config.APP_ID)})
 
-      const result = await Gcash.gcashPay({
-        partnerId: CONFIG.PARTNER_ID,
-        appId: CONFIG.APP_ID,
-        paymentRequestId: "2019112719074101000700000077771xxxx",
+      const result = await PaymentService.gcashPay({
+        partnerId: config.PARTNER_ID,
+        appId: config.APP_ID,
+        paymentRequestId,
         paymentOrderTitle: req.body.refNo,
         paymentAmount: req.body.paymentAmount,
         paymentReturnUrl: "https://staging.myparcels.ph/return",
