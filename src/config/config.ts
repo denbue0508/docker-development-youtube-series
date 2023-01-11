@@ -20,5 +20,10 @@ export default {
   FIREBASE_DB_URL: process.env.FIREBASE_DB_URL,
   SALT_STRING: process.env.SALT_STRING,
   APP_ID: process.env.APP_ID,
-  PARTNER_ID: process.env.PARTNER_ID,
+  GCASH_BASE_URL: process.env.GCASH_BASE_URL,
+  GCASH_PAYMENT_URL: process.env.GCASH_PAYMENT_URL,
+  REFERENCE_PARTNER_ID: process.env.REFERENCE_PARTNER_ID,
+  REFERENCE_CLIENT_ID: process.env.REFERENCE_CLIENT_ID,
+  REFERENCE_APP_ID: process.env.REFERENCE_APP_ID,
+  GCASH_PRIVATE_KEY: process.env.GCASH_PRIVATE_KEY.replace(/\\n/g, '\n'),
 }

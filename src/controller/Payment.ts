@@ -75,16 +75,17 @@ class Payment {
       if (!req.body || !req.body.orderId || !req.body.refNo || !req.body.paymentAmount
         || !req.body.customerName) throw ReferenceError("Invalid Parameter");
 
-
       const paymentLog: PaymentLogDao = new PaymentLogDao()
       const payment: PaymentDao = new PaymentDao()
 
       const paymentRequestId = `${moment().valueOf()}${req.body.orderId}`
       const paymentTime = moment().format('YYYY-MM-DDTHH:mm:ss')
 
+      const partnerId = config.REFERENCE_PARTNER_ID
+      const appId = config.REFERENCE_APP_ID
+
       const paymentLogObj: IPaymentLog = {
-        partnerId: String(config.PARTNER_ID),
-        paymentId: '',
+        partnerId: String(partnerId),
         paymentRequestId,
         paymentAmount: req.body.paymentAmount,
         paymentTime,
@@ -92,33 +93,50 @@ class Payment {
         paymentFailReason: '',
       }
 
-      await paymentLog.saveItem(paymentLogObj)
-      await payment.saveItem({ ...paymentLogObj, orderId: req.body.refNo, appId: String(config.APP_ID)})
+      // await paymentLog.saveItem(paymentLogObj)
+      // await payment.saveItem({ ...paymentLogObj, orderId: req.body.refNo, appId: String(appId)})
 
+    //   {
+    //     "partnerId": "217020000648273837215",
+    //     "appId": "2170020135085685",
+    //     "paymentRequestId": "16729804565398zdHkwhXR3jrdMfOJGhr",
+    //     "paymentOrderTitle": "Food",
+    //     "productCode": "51090000001432700001",
+    //     "paymentAmount": {
+    //         "currency": "PHP",
+    //         "value": "10000"
+    //     },
+    //     "paymentFactor": {
+    //         "isCashierPayment": true
+    //     },
+    //     "paymentReturnUrl": "",
+    //     "paymentNotifyUrl": "",
+    //     "extendInfo": "{\"customerBelongsTo\":\"GCASH\"}"
+    // }
+    
+    
       const result = await PaymentService.gcashPay({
-        partnerId: config.PARTNER_ID,
-        appId: config.APP_ID,
+        partnerId,
+        appId,
         paymentRequestId,
-        paymentOrderTitle: req.body.refNo,
+        paymentOrderTitle: "FOOD",
+        productCode: "51090000001432700001",
         paymentAmount: req.body.paymentAmount,
-        paymentReturnUrl: "https://staging.myparcels.ph/return",
-        paymentNotifyUrl: "https://www.merchant.com/paymentNotifyxxx",
-      });
-
-      res.status(200);
-      res.json({
-          success: true,
-          result
+        paymentFactor: {
+            isCashierPayment: true
+        },
+        paymentReturnUrl: "",
+        paymentNotifyUrl: ""
       });
 
       res.status(200).send({
         success: true,
-        message: 'Hello recorded'
+        result: result.data
       });
     } catch (err) {
       res.status(err instanceof ReferenceError ? 400 : 500).send({
         success: false,
-        message: err.message
+        message: `ERR CATCH: ${err.message}`
       });
     }
   }

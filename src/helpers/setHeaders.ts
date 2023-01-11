@@ -41,7 +41,7 @@ export const getGcashHeader = (
     sig.updateString(dataToSign)
 
     // calculate signature
-    const sigValueHex = sig. ()
+    const sigValueHex = sig.sign()
     console.log('sigValueHex: ' + sigValueHex)
 
     const hex2b64Signature = rs.hex2b64(sigValueHex)

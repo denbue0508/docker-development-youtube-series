@@ -7,7 +7,6 @@ const verifyToken = async (req, res, next): Promise<any> => {
     if (token) {
       token = token.split(' ')[1];
       let isValidToken = false;
-
       switch (req.method) {
         case "GET":
           isValidToken = config.ENV_GET_KEY == token;
@@ -16,8 +15,7 @@ const verifyToken = async (req, res, next): Promise<any> => {
           isValidToken = config.SECRET_TOKEN == token;
           break;
       }
-
-      return isValidToken ? next() : res.status(403).send({ success: false, message: 'Not authorized' });
+      return isValidToken ? next() : res.status(403).send({ success: false, message: 'Not authorized!!!' });
     } else {
       return res.status(403).send({ success: false, message: 'No token provided.' });
     }

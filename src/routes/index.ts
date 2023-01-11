@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import payment from './v1/payment';
-import verifyToken from '../helpers/verifyToken';
+// import verifyToken from '../helpers/verifyToken';
 
 export const v1: Router = Router();
 
