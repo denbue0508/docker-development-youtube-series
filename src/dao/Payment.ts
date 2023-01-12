@@ -23,14 +23,11 @@ class PaymentDao {
 
   public saveItem = async (params: IPaymentTx) => {
     await new PaymentTx({
-      partner_id: params.partnerId,
       payment_id: params.paymentId,
+      order_id: params.orderId,
+      client_id: params.appId,
       payment_request_id: params.paymentRequestId,
-      payment_amount_currency: params.paymentAmount.currency,
-      payment_amount_value: String(params.paymentAmount.value),
-      payment_time: params.paymentTime,
-      status: params.paymentStatus,
-      result_message: params.paymentFailReason,
+      payment_status: params.paymentStatus,
       createdAt: moment().startOf("day"),
       updateAt: moment().endOf("day"),
     }).save();
