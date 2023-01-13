@@ -9,7 +9,7 @@ const PaymentLogSchema = Schema(
     },
     payment_id: {
       type: String,
-      required: false
+      required: true
     },
     payment_request_id: {
       type: String,

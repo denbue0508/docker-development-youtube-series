@@ -7,7 +7,7 @@ class PaymentLogDao {
   public saveItem = async (params: IPaymentLog) => {
     await new PaymentLog({
       partner_id: params.partnerId,
-      payment_id: params?.paymentId || '',
+      payment_id: params.paymentId,
       payment_request_id: params.paymentRequestId,
       payment_amount_currency: params.paymentAmount.currency,
       payment_amount_value: params.paymentAmount.value,

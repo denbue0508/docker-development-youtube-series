@@ -82,18 +82,6 @@ class Payment {
       const partnerId = config.REFERENCE_PARTNER_ID
       const appId = config.REFERENCE_APP_ID
 
-      const paymentLogObj: IPaymentLog = {
-        partnerId: String(partnerId),
-        paymentRequestId,
-        paymentAmount: req.body.paymentAmount,
-        paymentTime,
-        paymentStatus: 'INITIATED',
-        paymentFailReason: '',
-      }
-
-      await paymentLog.saveItem(paymentLogObj)
-      await payment.saveItem({ ...paymentLogObj, orderId: req.body.refNo, appId: String(appId)})
-
       const result = await PaymentService.gcashPay({
         partnerId,
         appId,
@@ -107,6 +95,23 @@ class Payment {
         paymentReturnUrl: "",
         paymentNotifyUrl: ""
       });
+
+      if (result) {
+        const paymentLogObj: IPaymentLog = {
+          partnerId: String(partnerId),
+          paymentId: result.data.paymentId,
+          paymentRequestId,
+          paymentAmount: req.body.paymentAmount,
+          paymentTime,
+          paymentStatus: 'INITIATED',
+          paymentFailReason: '',
+        }
+
+        await paymentLog.saveItem(paymentLogObj)
+        await payment.saveItem({ ...paymentLogObj, orderId: req.body.refNo, appId: String(appId)})
+      }
+
+      console.log('result.data: ', result.data)
 
       res.status(200).send({
         success: true,
