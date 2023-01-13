@@ -3,7 +3,7 @@ import GCashImpl from '../impl/Authorization';
 import { validateAuthorization } from '../validations/Authorization';
 
 class Authorization {
-    public async applyToken(req: Request, res: Response): Promise<void> {
+    public async getUserInfo(req: Request, res: Response): Promise<void> {
         try {
             const { error: schemaErr } = validateAuthorization(req.body)
             if (schemaErr) {
@@ -26,7 +26,7 @@ class Authorization {
                 });
             }
             const { authCode } = req.body;
-            const result = await GCashImpl.applyToken(authCode);
+            const result = await GCashImpl.getUserInfo(authCode);
             // gawa helpers for condition 
             res.status(200);
             res.json({

@@ -4,6 +4,6 @@ import Controller from '../../controller/Authorization';
 const authorization: Router = Router();
 const controller = new Controller();
 
-authorization.post('/', controller.applyToken);
+authorization.post('/', controller.getUserInfo);
 
 export default authorization;
