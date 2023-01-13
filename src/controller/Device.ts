@@ -7,9 +7,9 @@ class Device {
             if ((!req.query.clientId && !req.query.riderId)) throw ReferenceError("Invalid Parameter");
 
             const device: DeviceDao = new DeviceDao();
-            const pagination = await device.getPagination({...req.query})
+            const pagination = await device.getPagination({ ...req.query })
 
-            if(pagination.totalPages < req.query.page) throw ReferenceError("Invalid page no.")
+            if (pagination.totalPages < req.query.page) throw ReferenceError("Invalid page no.")
 
             const data = await device.get({
                 ...req.query

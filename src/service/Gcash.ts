@@ -5,8 +5,7 @@ dotenv.config();
 import axios from 'axios'
 
 class Gcash {
-    public static getAuthorization = async (grantCode: string) => {
-        console.log('grantCode', grantCode)
+    public static applyToken = async (grantCode: string) => {
         const headers = getSignature(
             process.env.REFERENCE_CLIENT_ID,
             `/v1/authorizations/applyToken.htm`,
@@ -31,16 +30,15 @@ class Gcash {
             console.log(res.data.result)
             throw new ReferenceError(res.data.result.resultMessage)
         }
+        console.log(res.data.result)
         return res
     }
 
     public static inquiryUserInfo = async (authCode: string) => {
-        const authorization = await this.getAuthorization(authCode)
-        console.log('authorization dao', authorization.data)
+        const authorization = await this.applyToken(authCode)
         const token = authorization.data.accessToken
-        console.log('dao token', token)
         const headers = getSignature(
-            '2022112511150000031704',
+            process.env.REFERENCE_CLIENT_ID,
             '/v1/customers/user/inquiryUserInfoByAccessToken.htm',
             `${process.env.GCASH_PRIVATE_KEY}`,
             {
