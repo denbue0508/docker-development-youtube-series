@@ -27,6 +27,7 @@ class Authorization {
             }
             const { authCode } = req.body;
             const result = await GCashImpl.applyToken(authCode);
+            // gawa helpers for condition 
             res.status(200);
             res.json({
                 success: true,

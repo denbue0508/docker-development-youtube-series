@@ -14,7 +14,7 @@ moment.tz.setDefault('Asia/manila');
 
 admin.initializeApp({
   credential: admin.credential.cert(instance),
-  databaseURL: CONFIG.FIREBASE_DB_URL
+  databaseURL: 'https://fleet-staging-2333a.firebaseio.com'
 });
 
 if (CONFIG.APP === 'beta') {

@@ -1,9 +1,9 @@
-// import * as admin from 'firebase-admin'
+import * as admin from 'firebase-admin'
 // import { IDevice } from '../interfaces/Device'
 // import { Device } from '../model/Device';
 // import * as moment from 'moment-timezone';
 
-// class DeviceDao {
+// class Authorization{
 //     constructor() {
 
 //     }
