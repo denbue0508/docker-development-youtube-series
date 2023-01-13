@@ -99,7 +99,7 @@ class Payment {
         appId,
         paymentRequestId,
         paymentOrderTitle: req.body.paymentOrderTitle,
-        productCode: "51090000001432700001",
+        productCode: config.REFERENCE_PRODUCT_CODE,
         paymentAmount: req.body.paymentAmount,
         paymentFactor: {
             isCashierPayment: true
