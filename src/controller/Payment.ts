@@ -111,8 +111,6 @@ class Payment {
         await payment.saveItem({ ...paymentLogObj, orderId: req.body.refNo, appId: String(appId)})
       }
 
-      console.log('result.data: ', result.data)
-
       res.status(200).send({
         success: true,
         result: result.data
