@@ -20,6 +20,22 @@ class PaymentService {
       data: payload,
     });
   };
+
+  public static gcashPayInquiry = async (payload: any) => {
+    const headers = generateGCashSignature(
+      process.env.REFERENCE_CLIENT_ID,
+      `${process.env.GCASH_PAYMENT_INQUIRY_URL}`,
+      process.env.GCASH_PRIVATE_KEY,
+      payload
+    );
+
+    return axios({
+      method: "POST",
+      url: `${process.env.GCASH_BASE_URL}${process.env.GCASH_PAYMENT_INQUIRY_URL}`,
+      headers,
+      data: payload,
+    });
+  };
 }
 
 export default PaymentService;

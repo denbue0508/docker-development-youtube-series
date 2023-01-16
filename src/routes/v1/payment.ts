@@ -12,6 +12,7 @@ payment.post('/notify', controller.notify);
 /* MIDDLEWARE FOR AUTHENTICATION */
 payment.use(verifyToken);
 payment.post('/', controller.create);
+payment.post('/inquiry', controller.inquiry);
 payment.get('/', controller.get);
 
 

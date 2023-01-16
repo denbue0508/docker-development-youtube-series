@@ -5,42 +5,49 @@ const PaymentLogSchema = Schema(
   {
     partner_id: {
       type: String,
-      required: true
+      required: true,
     },
     payment_id: {
       type: String,
-      required: true
+      required: true,
     },
     payment_request_id: {
       type: String,
-      required: true
+      required: true,
     },
     payment_amount_currency: {
       type: String,
-      required: true
+      required: true,
     },
     payment_amount_value: {
       type: String,
-      required: true
+      required: true,
     },
     payment_time: {
       type: Date,
-      required: true
+      required: true,
+    },
+    order_id: {
+      type: String,
+      required: false,
+      trim: true,
     },
     status: {
       type: String,
-      required: true
+      required: true,
     },
     result_message: {
       type: String,
-      required: false
-    }
+      required: false,
+    },
   },
   {
     timestamps: true,
-    useNestedStrict: true
+    useNestedStrict: true,
   }
 );
 
-export const PaymentLog: Model<IPaymentLog> = model<IPaymentLog>("PaymentLog", PaymentLogSchema);
-
+export const PaymentLog: Model<IPaymentLog> = model<IPaymentLog>(
+  "PaymentLog",
+  PaymentLogSchema
+);

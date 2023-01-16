@@ -22,7 +22,7 @@ class PaymentDao {
   };
 
   public saveItem = async (params: IPaymentTx) => {
-    await new PaymentTx({
+    return await new PaymentTx({
       payment_id: params.paymentId,
       order_id: params.orderId,
       client_id: params.appId,
@@ -31,6 +31,15 @@ class PaymentDao {
       createdAt: moment().startOf("day"),
       updateAt: moment().endOf("day"),
     }).save();
+  };
+
+  public updateItem = async (filter, params: IPaymentTx) => {
+    return await PaymentTx.updateOne(filter, {
+      updatedAt: moment().endOf("day"),
+      payment_id: params.paymentId,
+      payment_request_id: params.paymentRequestId,
+      payment_status: params.paymentStatus,
+    });
   };
 }
 
