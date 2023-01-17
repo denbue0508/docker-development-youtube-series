@@ -7,18 +7,6 @@ class Authorization {
         try {
             const { error: schemaErr } = validateAuthorization(req.body)
             if (schemaErr) {
-                console.log(
-                    'AuthCode Request Failed',
-                    JSON.stringify(
-                        {
-                            message: 'Invalid Request Field',
-                            err: schemaErr.details
-                        },
-                        null,
-                        2
-                    )
-                )
-
                 res.status(422).json({
                     sucess: false,
                     message: 'Invalid Request Field',
@@ -27,7 +15,6 @@ class Authorization {
             }
             const { authCode } = req.body;
             const result = await GCashImpl.getUserInfo(authCode);
-            // gawa helpers for condition 
             res.status(200);
             res.json({
                 success: true,
