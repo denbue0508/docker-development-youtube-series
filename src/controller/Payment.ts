@@ -1,12 +1,6 @@
 import { Request, Response } from "express";
 import PaymentLogDao from "../dao/PaymentLog";
 import PaymentDao from "../dao/Payment";
-// import { ITransistorSoft, ILocation } from '../interfaces/PaymentTx';
-// import * as moment from 'moment-timezone'
-// import RidersDao from '../dao/Riders';
-// import { IDevice } from '../interfaces/Device';
-// import DeviceDao from '../dao/Device';
-import Cryptr from "../helpers/Crypto";
 import config from "../config/config";
 import * as moment from "moment-timezone";
 import { IPaymentLog, IPaymentTx } from "../interfaces/PaymentTx";
