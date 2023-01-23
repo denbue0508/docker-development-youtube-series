@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import GCashImpl from '../impl/Authorization';
+import GCashSvc from '../service/Gcash';
 import { validateAuthorization } from '../validations/Authorization';
 
 class Authorization {
@@ -14,7 +14,7 @@ class Authorization {
                 });
             }
             const { authCode } = req.body;
-            const result = await GCashImpl.getUserInfo(authCode);
+            const result = await GCashSvc.inquiryUserInfo(authCode);
             res.status(200);
             res.json({
                 success: true,

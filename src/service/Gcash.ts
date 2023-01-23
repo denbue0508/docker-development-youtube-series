@@ -27,10 +27,8 @@ class Gcash {
             }
         })
         if (res.data.result.resultStatus === 'F') {
-            console.log(res.data.result)
             throw new ReferenceError(res.data.result.resultMessage)
         }
-        console.log(res.data.result)
         return res
     }
 
@@ -45,7 +43,7 @@ class Gcash {
                 accessToken: token
             }
         )
-        return axios({
+        const res = await axios({
             method: 'POST',
             url: `${process.env.GCASH_BASE_URL}/v1/customers/user/inquiryUserInfoByAccessToken.htm`,
             headers,
@@ -53,6 +51,7 @@ class Gcash {
                 accessToken: token
             }
         })
+        return res.data
     }
 }
 

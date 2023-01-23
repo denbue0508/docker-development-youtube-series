@@ -1,5 +1,5 @@
-const rs = require('jsrsasign'); //sample rsa-js library, you can use other or if you have your own rsa library
-const moment = require('moment'); //moment library
+const rs = require('jsrsasign');
+const moment = require('moment');
 
 export const getSignature = (
     clientId: string,
@@ -33,7 +33,7 @@ export const getSignature = (
 
     const headerData = {
         'content-type': 'application/json; charset=UTF-8',
-        'Client-Id': clientId, //2022091611342100029162
+        'Client-Id': clientId,
         'Request-Time': currentTimestamp,
         Signature: 'algorithm=RSA256, keyVersion=1, signature=' + encodedSignature
     }
