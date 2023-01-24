@@ -26,8 +26,6 @@ class Gcash {
       payload
     );
 
-    console.log(payload);
-    
     return axios({
       method: "POST",
       url: this.URL,
