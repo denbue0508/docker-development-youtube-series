@@ -28,4 +28,6 @@ export default {
   REFERENCE_APP_ID: process.env.REFERENCE_APP_ID,
   REFERENCE_PRODUCT_CODE: process.env.REFERENCE_PRODUCT_CODE,
   GCASH_PRIVATE_KEY: process.env.GCASH_PRIVATE_KEY.replace(/\\n/g, '\n'),
+  GCASH_REFUND_URL: process.env.GCASH_REFUND_URL,
+  GCASH_INQUIRY_REFUND: process.env.GCASH_INQUIRY_REFUND
 }
