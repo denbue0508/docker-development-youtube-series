@@ -6,31 +6,33 @@ const PaymentTxSchema = Schema(
     payment_id: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
-    order_id: {
+    refNo: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     client_id: {
       type: String,
-      required: true
+      required: true,
     },
     payment_request_id: {
       type: String,
-      required: true
+      required: true,
     },
     payment_status: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   {
     timestamps: true,
-    useNestedStrict: true
+    useNestedStrict: true,
   }
 );
 
-export const PaymentTx: Model<IPaymentTx> = model<IPaymentTx>("PaymentTx", PaymentTxSchema);
-
+export const PaymentTx: Model<IPaymentTx> = model<IPaymentTx>(
+  "PaymentTx",
+  PaymentTxSchema
+);

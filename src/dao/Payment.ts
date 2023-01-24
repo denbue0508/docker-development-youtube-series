@@ -6,7 +6,7 @@ class PaymentDao {
   constructor() {}
   public updateStatus = async (filter, status: string) => {
     await PaymentTx.updateOne(filter, {
-      updatedAt: moment().endOf("day"),
+      updatedAt: moment(),
       payment_status: status,
     });
   };
@@ -24,21 +24,27 @@ class PaymentDao {
   public saveItem = async (params: IPaymentTx) => {
     return await new PaymentTx({
       payment_id: params.paymentId,
-      order_id: params.orderId,
+      refNo: params.refNo,
       client_id: params.appId,
       payment_request_id: params.paymentRequestId,
       payment_status: params.paymentStatus,
-      createdAt: moment().startOf("day"),
-      updateAt: moment().endOf("day"),
+      createdAt: moment(),
+      updateAt: moment(),
     }).save();
   };
 
   public updateItem = async (filter, params: IPaymentTx) => {
     return await PaymentTx.updateOne(filter, {
-      updatedAt: moment().endOf("day"),
+      updatedAt: moment(),
       payment_id: params.paymentId,
       payment_request_id: params.paymentRequestId,
       payment_status: params.paymentStatus,
+    });
+  };
+
+  public countItem = async (filter) => {
+    return await PaymentTx.countDocuments({
+      createdAt: { $lt: moment(filter), $gte: moment().startOf("year") },
     });
   };
 }

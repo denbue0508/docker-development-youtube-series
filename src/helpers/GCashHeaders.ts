@@ -1,7 +1,7 @@
 const rs = require("jsrsasign"); //sample rsa-js library, you can use other or if you have your own rsa library
 const moment = require("moment"); //moment library
 
-export const generateGCashSignature = (
+export const set = (
   clientId: string,
   urlString: string,
   privKey: string,

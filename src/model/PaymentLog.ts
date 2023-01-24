@@ -27,9 +27,9 @@ const PaymentLogSchema = Schema(
       type: Date,
       required: true,
     },
-    order_id: {
+    refNo: {
       type: String,
-      required: false,
+      required: true,
       trim: true,
     },
     status: {
