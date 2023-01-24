@@ -47,6 +47,10 @@ class PaymentDao {
       createdAt: { $lt: moment(filter), $gte: moment().startOf("year") },
     });
   };
+
+  public getTransaction = async (paymentRequestId: string): Promise<any> => {
+    return await PaymentTx.findOne({payment_request_id: paymentRequestId});
+  };
 }
 
 export default PaymentDao;

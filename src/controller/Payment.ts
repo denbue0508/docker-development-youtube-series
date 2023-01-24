@@ -5,7 +5,7 @@ import config from "../config/config";
 import * as moment from "moment-timezone";
 import { IPaymentLog, IPaymentTx } from "../interfaces/PaymentTx";
 
-import Gcash from "../service/Gcash";
+import GcashDao from "../service/Gcash";
 
 class Payment {
   public notify = async (req: Request, res: Response): Promise<any> => {
@@ -74,6 +74,7 @@ class Payment {
 
   public create = async (req: Request, res: Response): Promise<any> => {
     try {
+      // validate parameter
       if (
         !req.body ||
         !req.body.refNo ||
@@ -82,12 +83,11 @@ class Payment {
       )
         throw ReferenceError("Invalid Parameter");
 
+      // initialization
       const { refNo, paymentAmount, paymentOrderTitle } = req.body;
       const reqPaymentRequestId = req.body?.paymentRequestId || "";
 
-      const paymentLog: PaymentLogDao = new PaymentLogDao();
-      const payment: PaymentDao = new PaymentDao();
-
+      // declaration
       const currentTimeStamp = `${moment().valueOf()}`;
       const paymentRequestId =
         reqPaymentRequestId || `${currentTimeStamp}${refNo}`;
@@ -96,6 +96,7 @@ class Payment {
       const partnerId = config.REFERENCE_PARTNER_ID;
       const appId = config.REFERENCE_APP_ID;
 
+      const Gcash: GcashDao = new GcashDao(process.env.GCASH_PAYMENT_URL);
       const result = await Gcash.pay({
         partnerId,
         appId,
@@ -127,6 +128,10 @@ class Payment {
           appId: String(appId),
         };
 
+        // create new instance
+        const paymentLog: PaymentLogDao = new PaymentLogDao();
+        const payment: PaymentDao = new PaymentDao();
+
         if (!reqPaymentRequestId) {
           await paymentLog.saveItem(paymentLogObj);
           await payment.saveItem(paymentObj);
@@ -150,25 +155,44 @@ class Payment {
 
   public inquiry = async (req: Request, res: Response): Promise<any> => {
     try {
-      console.log('inquiry: ', req.body.paymentRequestId)
+      // validate parameter
       if (!req.body || !req.body.paymentRequestId)
         throw ReferenceError("Invalid Parameter");
+
+      // initialization
+      const { paymentRequestId } = req.body;
+      let result = {}
 
       const partnerId = config.REFERENCE_PARTNER_ID;
       const appId = config.REFERENCE_APP_ID;
 
-      const result = await Gcash.inquiry({
-        partnerId,
-        appId,
-        paymentRequestId: req.body.paymentRequestId,
-      });
+      const payment: PaymentDao = new PaymentDao();
+      const paymentTx = await payment.getTransaction(paymentRequestId);
+
+      // check payment log is updated via notify      
+      if(paymentTx) {
+        // if not updated, call gcash payment inquiry api
+        if (paymentTx.payment_status === 'INITIATED') {
+          const Gcash: GcashDao = new GcashDao(process.env.GCASH_PAYMENT_INQUIRY_URL);
+          const res = await Gcash.inquiry({
+            partnerId,
+            appId,
+            paymentRequestId
+          });
+          result = res.data
+        } else {
+          result = {
+            paymentStatus: paymentTx.payment_status
+          }
+        }
+      }
 
       res.status(200).send({
         success: true,
-        result: result.data,
+        result
       });
+
     } catch (err) {
-      console.log('inquiry: ', err)
       res.status(err instanceof ReferenceError ? 400 : 500).send({
         success: false,
         message: `ERR CATCH: ${err.message}`,
