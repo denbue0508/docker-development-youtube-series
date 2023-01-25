@@ -1,4 +1,5 @@
 export interface IPaymentTx {
+  userId: string;
   partnerId: string;
   refNo: string;
   paymentId: string;
@@ -11,6 +12,7 @@ export interface IPaymentTx {
 }
 
 export interface IPaymentLog {
+  userId: string;
   partnerId: string;
   refNo: string;
   paymentId: string;

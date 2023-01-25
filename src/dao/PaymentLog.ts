@@ -6,6 +6,7 @@ class PaymentLogDao {
   constructor() {}
   public saveItem = async (params: IPaymentLog) => {
     return await new PaymentLog({
+      user_id: params.userId,
       partner_id: params.partnerId,
       payment_id: params.paymentId,
       refNo: params.refNo,

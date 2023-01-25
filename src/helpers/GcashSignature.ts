@@ -1,15 +1,17 @@
 const rs = require("jsrsasign"); //sample rsa-js library, you can use other or if you have your own rsa library
 const moment = require("moment"); //moment library
 
-export const set = (
-  clientId: string,
+import * as dotenv from "dotenv";
+dotenv.config();
+
+export const setHeader = (
   urlString: string,
-  privKey: string,
   data: any
 ) => {
   const date = new Date();
   const currentTimestamp = moment(date).format("YYYY-MM-DDTHH:mm:ss.SSSZ");
-  let privateKeyStr = privKey;
+  let privateKeyStr = process.env.GCASH_PRIVATE_KEY;
+  let clientId = process.env.REFERENCE_CLIENT_ID;
 
   const dataToSign =
     "POST " +

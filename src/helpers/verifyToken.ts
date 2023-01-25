@@ -15,7 +15,7 @@ const verifyToken = async (req, res, next): Promise<any> => {
           isValidToken = config.SECRET_TOKEN == token;
           break;
       }
-      return isValidToken ? next() : res.status(403).send({ success: false, message: 'Not authorized!!!' });
+      return isValidToken ? next() : res.status(403).send({ success: false, message: 'Not authorized' });
     } else {
       return res.status(403).send({ success: false, message: 'No token provided.' });
     }
