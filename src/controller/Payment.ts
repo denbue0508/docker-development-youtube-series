@@ -94,7 +94,9 @@ class Payment {
       const partnerId = config.REFERENCE_PARTNER_ID;
       const appId = config.REFERENCE_APP_ID;
 
-      const Gcash: GcashService = new GcashService(process.env.GCASH_PAYMENT_URL);
+      const Gcash: GcashService = new GcashService(
+        process.env.GCASH_PAYMENT_URL
+      );
       const result = await Gcash.pay({
         partnerId,
         appId,
@@ -153,39 +155,40 @@ class Payment {
 
   public inquiry = async (req: Request, res: Response): Promise<any> => {
     try {
-      if (!req.body || !req.body.paymentRequestId)
+      if (!req.body || !req.body.userId || !req.body.paymentRequestId)
         throw ReferenceError("Invalid Parameter");
 
-      const { paymentRequestId } = req.body;
-      let result = {}
+      const { paymentRequestId, userId } = req.body;
+      let result = {};
 
       const partnerId = config.REFERENCE_PARTNER_ID;
       const appId = config.REFERENCE_APP_ID;
 
       const payment: PaymentDao = new PaymentDao();
-      const paymentTx = await payment.getTransaction(paymentRequestId);
+      const paymentTx = await payment.getTransaction({user_id: userId, payment_request_id: paymentRequestId});
 
-      if(paymentTx) {
-        if (paymentTx.payment_status === 'INITIATED') {
-          const Gcash: GcashService = new GcashService(process.env.GCASH_PAYMENT_INQUIRY_URL);
+      if (paymentTx) {
+        if (paymentTx.payment_status === "INITIATED") {
+          const Gcash: GcashService = new GcashService(
+            process.env.GCASH_PAYMENT_INQUIRY_URL
+          );
           const res = await Gcash.inquiryPayment({
             partnerId,
             appId,
-            paymentRequestId
+            paymentRequestId,
           });
-          result = res.data
+          result = res.data;
         } else {
           result = {
-            paymentStatus: paymentTx.payment_status
-          }
+            paymentStatus: paymentTx.payment_status,
+          };
         }
       }
 
       res.status(200).send({
         success: true,
-        result
+        result,
       });
-
     } catch (err) {
       res.status(err instanceof ReferenceError ? 400 : 500).send({
         success: false,

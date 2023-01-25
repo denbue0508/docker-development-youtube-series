@@ -4,7 +4,7 @@ import * as moment from "moment-timezone";
 
 class PaymentDao {
   constructor() {}
-  public updateStatus = async (filter, status: string) => {
+  public updateStatus = async (filter: any, status: string) => {
     await PaymentTx.updateOne(filter, {
       updatedAt: moment(),
       payment_status: status,
@@ -34,7 +34,7 @@ class PaymentDao {
     }).save();
   };
 
-  public updateItem = async (filter, params: IPaymentTx) => {
+  public updateItem = async (filter: any, params: IPaymentTx) => {
     return await PaymentTx.updateOne(filter, {
       updatedAt: moment(),
       payment_id: params.paymentId,
@@ -43,14 +43,14 @@ class PaymentDao {
     });
   };
 
-  public countItem = async (filter) => {
+  public countItem = async (filter: any) => {
     return await PaymentTx.countDocuments({
       createdAt: { $lt: moment(filter), $gte: moment().startOf("year") },
     });
   };
 
-  public getTransaction = async (paymentRequestId: string): Promise<any> => {
-    return await PaymentTx.findOne({payment_request_id: paymentRequestId});
+  public getTransaction = async (filter: any): Promise<any> => {
+    return await PaymentTx.findOne(filter);
   };
 }
 
