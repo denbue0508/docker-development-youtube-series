@@ -1,34 +1,42 @@
 import { Model, model, Schema } from "mongoose";
-import { IHeatmap } from "../interfaces/PaymentTx";
+import { IPaymentTx } from "../interfaces/PaymentTx";
 
-const HeatmapSchema = Schema(
+const PaymentTxSchema = Schema(
   {
-    job_id: {
+    payment_id: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
+    },
+    refNo: {
+      type: String,
+      required: true,
+      trim: true,
     },
     client_id: {
       type: String,
-      required: true
+      required: true,
     },
-    hub_id: {
+    payment_request_id: {
       type: String,
-      trim: true
+      required: true,
     },
-    rider_id: {
-      type: String
+    payment_status: {
+      type: String,
+      required: true,
     },
-    points: [{
-      latitude: Number,
-      longitude: Number
-    }]
+    user_id: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
-    useNestedStrict: true
+    useNestedStrict: true,
   }
 );
 
-export const Heatmap: Model<IHeatmap> = model<IHeatmap>("Heatmap", HeatmapSchema);
-
+export const PaymentTx: Model<IPaymentTx> = model<IPaymentTx>(
+  "PaymentTx",
+  PaymentTxSchema
+);

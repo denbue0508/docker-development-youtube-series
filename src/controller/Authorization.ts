@@ -14,7 +14,10 @@ class Authorization {
                 });
             }
             const { authCode } = req.body;
-            const result = await GCashSvc.inquiryUserInfo(authCode);
+            const Gcash: GCashSvc = new GCashSvc(
+                process.env.GCASH_INQUIRY_USER_INFO_URL
+            );
+            const result = await Gcash.inquiryUserInfo(authCode);
             res.status(200);
             res.json({
                 success: true,

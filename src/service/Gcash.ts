@@ -1,15 +1,34 @@
-import { getSignature } from '../helpers/gcash'
-import * as dotenv from 'dotenv';
+import { setHeader } from "../helpers/GcashSignature";
+import * as dotenv from "dotenv";
 dotenv.config();
 
-import axios from 'axios'
-
+import axios from "axios";
 class Gcash {
-    public static applyToken = async (grantCode: string) => {
-        const headers = getSignature(
-            process.env.REFERENCE_CLIENT_ID,
-            `/v1/authorizations/applyToken.htm`,
-            `${process.env.GCASH_PRIVATE_KEY}`,
+    private PATH: string;
+    private URL: string;
+
+    constructor(path: string) {
+        this.PATH = path;
+        this.URL = `${process.env.GCASH_BASE_URL}${this.PATH}`
+    }
+
+    public post = async (payload: any) => {
+        const headers = setHeader(
+            `${this.PATH}`,
+            payload
+        );
+
+        return axios({
+            method: "POST",
+            url: `${this.URL}`,
+            headers,
+            data: payload,
+        });
+    };
+
+    public applyToken = async (grantCode: string) => {
+        const headers = setHeader(
+            process.env.GCASH_APPLY_TOKEN_URL,
             {
                 referenceClientId: process.env.REFERENCE_CLIENT_ID,
                 grantType: 'AUTHORIZATION_CODE',
@@ -18,7 +37,7 @@ class Gcash {
         )
         const res = await axios({
             method: 'POST',
-            url: `${process.env.GCASH_BASE_URL}/v1/authorizations/applyToken.htm`,
+            url: `${process.env.GCASH_BASE_URL}${process.env.GCASH_APPLY_TOKEN_URL}`,
             headers,
             data: {
                 referenceClientId: process.env.REFERENCE_CLIENT_ID,
@@ -32,20 +51,18 @@ class Gcash {
         return res
     }
 
-    public static inquiryUserInfo = async (authCode: string) => {
+    public inquiryUserInfo = async (authCode: string) => {
         const authorization = await this.applyToken(authCode)
         const token = authorization.data.accessToken
-        const headers = getSignature(
-            process.env.REFERENCE_CLIENT_ID,
-            '/v1/customers/user/inquiryUserInfoByAccessToken.htm',
-            `${process.env.GCASH_PRIVATE_KEY}`,
+        const headers = setHeader(
+            `${this.PATH}`,
             {
                 accessToken: token
             }
         )
         const res = await axios({
             method: 'POST',
-            url: `${process.env.GCASH_BASE_URL}/v1/customers/user/inquiryUserInfoByAccessToken.htm`,
+            url: `${this.URL}`,
             headers,
             data: {
                 accessToken: token
@@ -55,4 +72,4 @@ class Gcash {
     }
 }
 
-export default Gcash
+export default Gcash;

@@ -1,9 +1,9 @@
 import app from './App';
-import CONFIG from './config/config';
+import config from './config/config';
 import './config/db';
 import * as moment from 'moment-timezone';
 
-const PORT = CONFIG.PORT;
+const PORT = config.PORT;
 const https = require('https');
 const fs = require('fs');
 
@@ -14,16 +14,16 @@ moment.tz.setDefault('Asia/manila');
 
 admin.initializeApp({
   credential: admin.credential.cert(instance),
-  databaseURL: 'https://fleet-staging-2333a.firebaseio.com'
+  databaseURL: config.FIREBASE_DB_URL
 });
 
-if (CONFIG.APP === 'beta') {
+if (config.APP === 'beta') {
   const httpsOptions = {
     cert: fs.readFileSync('/home/ctodev/ssl/fullchain.pem'),
     key: fs.readFileSync('/home/ctodev/ssl/privkey.pem')
   }
   https.createServer(httpsOptions, app).listen(PORT, () => {
-    console.info(`server started on port ${PORT} (${CONFIG.APP})`); // eslint-disable-line no-console
+    console.info(`server started on port ${PORT} (${config.APP})`); // eslint-disable-line no-console
   });
 } else {
   app.listen(PORT, err => {

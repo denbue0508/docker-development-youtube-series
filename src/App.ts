@@ -26,7 +26,7 @@ class App {
   }
 
   private setHealthChecker(): void {
-    this.express.use('/health-check', (req, res) => res.status(200).send('DRIVER-API OK!'));
+    this.express.use('/health-check', (req, res) => res.status(200).send('PARCELS-IO OK!'));
   }
 
   private setRoutes(): void {
