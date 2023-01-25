@@ -76,13 +76,14 @@ class Payment {
     try {
       if (
         !req.body ||
+        !req.body.userId ||
         !req.body.refNo ||
         !req.body.paymentAmount ||
         !req.body.paymentOrderTitle
       )
         throw ReferenceError("Invalid Parameter");
 
-      const { refNo, paymentAmount, paymentOrderTitle } = req.body;
+      const { userId, refNo, paymentAmount, paymentOrderTitle } = req.body;
       const reqPaymentRequestId = req.body?.paymentRequestId || "";
 
       const currentTimeStamp = `${moment().valueOf()}`;
@@ -110,6 +111,7 @@ class Payment {
 
       if (result) {
         const paymentLogObj: IPaymentLog = {
+          userId,
           paymentId: result.data.paymentId,
           partnerId: String(partnerId),
           paymentTime,

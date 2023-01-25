@@ -5,13 +5,13 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 export const setHeader = (
+  clientId: string,
   urlString: string,
   data: any
 ) => {
   const date = new Date();
   const currentTimestamp = moment(date).format("YYYY-MM-DDTHH:mm:ss.SSSZ");
   let privateKeyStr = process.env.GCASH_PRIVATE_KEY;
-  let clientId = process.env.REFERENCE_CLIENT_ID;
 
   const dataToSign =
     "POST " +

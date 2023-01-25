@@ -23,6 +23,7 @@ class PaymentDao {
 
   public saveItem = async (params: IPaymentTx) => {
     return await new PaymentTx({
+      user_id: params.userId,
       payment_id: params.paymentId,
       refNo: params.refNo,
       client_id: params.appId,
