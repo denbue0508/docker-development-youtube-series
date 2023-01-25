@@ -1,9 +1,9 @@
 import * as mongoose from 'mongoose';
-import CONFIG from './config';
+import config from './config';
 
 mongoose.set('useCreateIndex', true);
 
-const connectionStr = CONFIG.APP === 'staging' || CONFIG.APP == 'beta' || CONFIG.APP === 'production' ? `mongodb://${CONFIG.DB_USER}:${encodeURIComponent(CONFIG.DB_PASSWORD)}@${CONFIG.DB_HOST}?authSource=admin` : CONFIG.DB_HOST;
+const connectionStr = config.APP === 'staging' || config.APP == 'beta' || config.APP === 'production' ? `mongodb://${config.DB_USER}:${encodeURIComponent(config.DB_PASSWORD)}@${config.DB_HOST}?authSource=admin` : config.DB_HOST;
 // Connecting to the database
 export default (async () => {
   try {

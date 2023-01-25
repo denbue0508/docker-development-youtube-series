@@ -1,12 +1,8 @@
 import { Router } from 'express';
-import matrix from './v1/matrix';
-import device from './v1/device';
-import verifyToken from '../helpers/verifyToken';
+import payment from './v1/payment';
+// import verifyToken from '../helpers/verifyToken';
 
 export const v1: Router = Router();
 
-/* MIDDLEWARE FOR AUTHENTICATION */
-v1.use(verifyToken);
-
-v1.use('/heatmap', matrix);
-v1.use('/device', device);
+v1.use('/payment', payment);
+v1.use('/refund', payment);
