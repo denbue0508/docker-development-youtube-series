@@ -5,7 +5,7 @@ import config from "../config/config";
 import * as moment from "moment-timezone";
 import { IPaymentLog, IPaymentTx } from "../interfaces/PaymentTx";
 
-import GcashDao from "../service/Gcash";
+import GcashService from "../service/Gcash";
 
 class Payment {
   public notify = async (req: Request, res: Response): Promise<any> => {
@@ -74,7 +74,6 @@ class Payment {
 
   public create = async (req: Request, res: Response): Promise<any> => {
     try {
-      // validate parameter
       if (
         !req.body ||
         !req.body.refNo ||
@@ -83,11 +82,9 @@ class Payment {
       )
         throw ReferenceError("Invalid Parameter");
 
-      // initialization
       const { refNo, paymentAmount, paymentOrderTitle } = req.body;
       const reqPaymentRequestId = req.body?.paymentRequestId || "";
 
-      // declaration
       const currentTimeStamp = `${moment().valueOf()}`;
       const paymentRequestId =
         reqPaymentRequestId || `${currentTimeStamp}${refNo}`;
@@ -96,7 +93,7 @@ class Payment {
       const partnerId = config.REFERENCE_PARTNER_ID;
       const appId = config.REFERENCE_APP_ID;
 
-      const Gcash: GcashDao = new GcashDao(process.env.GCASH_PAYMENT_URL);
+      const Gcash: GcashService = new GcashService(process.env.GCASH_PAYMENT_URL);
       const result = await Gcash.pay({
         partnerId,
         appId,
@@ -128,7 +125,6 @@ class Payment {
           appId: String(appId),
         };
 
-        // create new instance
         const paymentLog: PaymentLogDao = new PaymentLogDao();
         const payment: PaymentDao = new PaymentDao();
 
@@ -155,11 +151,9 @@ class Payment {
 
   public inquiry = async (req: Request, res: Response): Promise<any> => {
     try {
-      // validate parameter
       if (!req.body || !req.body.paymentRequestId)
         throw ReferenceError("Invalid Parameter");
 
-      // initialization
       const { paymentRequestId } = req.body;
       let result = {}
 
@@ -169,12 +163,10 @@ class Payment {
       const payment: PaymentDao = new PaymentDao();
       const paymentTx = await payment.getTransaction(paymentRequestId);
 
-      // check payment log is updated via notify      
       if(paymentTx) {
-        // if not updated, call gcash payment inquiry api
         if (paymentTx.payment_status === 'INITIATED') {
-          const Gcash: GcashDao = new GcashDao(process.env.GCASH_PAYMENT_INQUIRY_URL);
-          const res = await Gcash.inquiry({
+          const Gcash: GcashService = new GcashService(process.env.GCASH_PAYMENT_INQUIRY_URL);
+          const res = await Gcash.inquiryPayment({
             partnerId,
             appId,
             paymentRequestId
