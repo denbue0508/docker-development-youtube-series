@@ -97,7 +97,7 @@ class Payment {
       const Gcash: GcashService = new GcashService(
         process.env.GCASH_PAYMENT_URL
       );
-      const result = await Gcash.pay({
+      const result = await Gcash.post({
         partnerId,
         appId,
         paymentRequestId,
@@ -172,7 +172,7 @@ class Payment {
           const Gcash: GcashService = new GcashService(
             process.env.GCASH_PAYMENT_INQUIRY_URL
           );
-          const res = await Gcash.inquiryPayment({
+          const res = await Gcash.post({
             partnerId,
             appId,
             paymentRequestId,

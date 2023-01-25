@@ -14,22 +14,7 @@ class Gcash {
     this.URL = `${process.env.GCASH_BASE_URL}${this.PATH}`
   }
 
-  public pay = async (payload: any) => {
-    const headers = setHeader(
-      this.CLIENT_ID,
-      `${this.PATH}`,
-      payload
-    );
-
-    return axios({
-      method: "POST",
-      url: `${this.URL}`,
-      headers,
-      data: payload,
-    });
-  };
-
-  public inquiryPayment = async (payload: any) => {
+  public post = async (payload: any) => {
     const headers = setHeader(
       this.CLIENT_ID,
       `${this.PATH}`,
