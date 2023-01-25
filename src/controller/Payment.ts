@@ -53,12 +53,13 @@ class Payment {
 
   public get = async (req: Request, res: Response): Promise<any> => {
     try {
-      if (!req.query || !req.query.partnerId || !req.query.paymentRequestId)
+      if (!req.query || !req.query.userId || !req.query.partnerId || !req.query.paymentId)
         throw ReferenceError("Invalid Parameters");
 
+      const { userId, partnerId, paymentId } = req.query;
       const payment: PaymentDao = new PaymentDao();
 
-      const data = await payment.getTransactions(req.body);
+      const data = await payment.getTransactions({ userId, partnerId, paymentId });
 
       res.status(200).send({
         success: true,
@@ -165,7 +166,7 @@ class Payment {
       const appId = config.REFERENCE_APP_ID;
 
       const payment: PaymentDao = new PaymentDao();
-      const paymentTx = await payment.getTransaction({user_id: userId, payment_request_id: paymentRequestId});
+      const paymentTx = await payment.getTransaction({ user_id: userId, payment_request_id: paymentRequestId });
 
       if (paymentTx) {
         if (paymentTx.payment_status === "INITIATED") {
