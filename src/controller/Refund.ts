@@ -10,6 +10,7 @@ class Refund {
     try {
       if (
         !req.body ||
+        !req.body.userId ||
         !req.body.refundId ||
         !req.body.refundRequestId
       )
@@ -27,8 +28,8 @@ class Refund {
       });
 
       res.status(200).send({
-        success: true,
-        result: result.data
+        success: result.data.resultStatus === 'S',
+        ...result.data
       });
 
     } catch (err) {
@@ -44,6 +45,7 @@ class Refund {
       // validate parameter
       if (
         !req.body ||
+        !req.body.userId ||
         !req.body.paymentRequestId ||
         !req.body.paymentId ||
         !req.body.refundAmount ||
@@ -60,7 +62,7 @@ class Refund {
       const Gcash: GcashService = new GcashService(config.GCASH_REFUND_URL);
       const extendInfo = {}
 
-      const result = await Gcash.post({
+      const result: any = await Gcash.post({
         partnerId,
         refundRequestId,
         paymentId,
@@ -71,8 +73,8 @@ class Refund {
       });
 
       res.status(200).send({
-        success: true,
-        result: result.data,
+        success: result.data.resultStatus === 'S',
+        ...result.data,
       });
     } catch (err) {
       res.status(err instanceof ReferenceError ? 400 : 500).send({
