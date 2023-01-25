@@ -4,19 +4,16 @@ dotenv.config();
 
 import axios from "axios";
 class Gcash {
-  private CLIENT_ID: string;
   private PATH: string;
   private URL: string;
 
   constructor(path: string) {
-    this.CLIENT_ID = process.env.REFERENCE_CLIENT_ID
     this.PATH = path;
     this.URL = `${process.env.GCASH_BASE_URL}${this.PATH}`
   }
 
   public post = async (payload: any) => {
     const headers = setHeader(
-      this.CLIENT_ID,
       `${this.PATH}`,
       payload
     );
