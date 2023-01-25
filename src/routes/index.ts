@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import authorization from './v1/authorization';
-import verifyAuthCode from '../helpers/verifyAuthCode';
+import verify from '../helpers/gcashAuthCode';
 
 export const v1: Router = Router();
 
 /* MIDDLEWARE FOR AUTHENTICATION */
-v1.use(verifyAuthCode);
+v1.use(verify);
 v1.use('/authorization', authorization);

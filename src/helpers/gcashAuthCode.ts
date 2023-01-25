@@ -1,6 +1,6 @@
 import { getAuthCode } from "../dao/Firebase";
 
-const verifyAuthCode = async (req, res, next): Promise<any> => {
+const verify = async (req, res, next): Promise<any> => {
     try {
         const { authCode } = req.body;
 
@@ -24,4 +24,4 @@ const verifyAuthCode = async (req, res, next): Promise<any> => {
     }
 };
 
-export default verifyAuthCode;
+export default verify;
