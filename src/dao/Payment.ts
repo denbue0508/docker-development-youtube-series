@@ -11,13 +11,13 @@ class PaymentDao {
     });
   };
 
-  public getTransactions = async (params: IPaymentTx): Promise<any> => {
-    const { paymentId, partnerId, paymentRequestId } = params;
+  public getTransactions = async (params: any): Promise<any> => {
+    const { userId, paymentId, partnerId } = params;
 
     return await PaymentTx.find({
+      user_id: userId,
       payment_id: paymentId,
-      partner_id: partnerId,
-      payment_request_id: paymentRequestId,
+      partner_id: partnerId
     });
   };
 
