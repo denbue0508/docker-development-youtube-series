@@ -9,7 +9,6 @@ import GcashService from "../service/Gcash";
 
 class Payment {
   public notify = async (req: Request, res: Response): Promise<any> => {
-    console.log('notify req.body: ', req.body)
     try {
       if (
         !req.body ||
@@ -31,14 +30,6 @@ class Payment {
         req.body.paymentStatus
       );
 
-      console.log('notify result: ', {
-        result: {
-          resultCode: "SUCCESS",
-          resultStatus: "S",
-          resultMessage: "sucess",
-        },
-      })
-
       res.status(200).send({
         result: {
           resultCode: "SUCCESS",
@@ -49,15 +40,6 @@ class Payment {
     } catch (err) {
       const referenceError = err instanceof ReferenceError ? 400 : 500;
 
-      console.log('NOTIFY ERR1: ', referenceError, {
-        result: {
-          resultCode: referenceError ? "UNKNOWN_EXCEPTION" : "PROCESS_FAIL",
-          resultStatus: referenceError
-            ? "An API calling is failed, which is caused by unknown reasons."
-            : "A general business failure occurred. Don't retry.",
-          resultMessage: err.message,
-        },
-      })
       res.status(err instanceof ReferenceError ? 400 : 500).send({
         result: {
           resultCode: referenceError ? "UNKNOWN_EXCEPTION" : "PROCESS_FAIL",
@@ -175,7 +157,6 @@ class Payment {
   };
 
   public inquiry = async (req: Request, res: Response): Promise<any> => {
-    console.log('inquiry: ', req.body)
     try {
       if (!req.body || !req.body.userId || !req.body.paymentRequestId)
         throw ReferenceError("Invalid Parameter");
@@ -206,10 +187,6 @@ class Payment {
           };
         }
       }
-      console.log('inquiry result: ', {
-        success: true,
-        result,
-      })
 
       res.status(200).send({
         success: true,
