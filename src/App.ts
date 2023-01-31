@@ -1,8 +1,8 @@
 import * as bodyParser from 'body-parser';
-import * as cors from 'cors';
-import * as express from 'express';
-import * as helmet from 'helmet';
-import * as morgan from 'morgan';
+import cors from 'cors';
+import express from 'express';
+import helmet from 'helmet';
+import morgan from 'morgan';
 import { v1 } from './routes/index';
 import * as errorHandler from './helpers/errorHandler';
 
