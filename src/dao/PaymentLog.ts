@@ -21,9 +21,8 @@ class PaymentLogDao {
 
     if (params?.refNo) {
       return await new PaymentLog({...payLog, refNo: params.refNo}).save();
-    } else {
-      return await new PaymentLog(payLog).save();
     }
+    return await new PaymentLog(payLog).save();
   };
   public updateItem = async (filter, params: IPaymentLog) => {
     return await PaymentLog.updateOne(filter, {
