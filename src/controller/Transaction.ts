@@ -1,15 +1,8 @@
 import { Request, Response } from "express";
-import PaymentLogDao from "../dao/PaymentLog";
 import TransactionDao from "../dao/Transaction";
-import config from "../config/config";
-import * as moment from "moment-timezone";
-import { IPaymentLog, IPaymentTx } from "../interfaces/PaymentTx";
-
-import GcashService from "../service/Gcash";
 
 class Transaction {
   public post = async (req: Request, res: Response): Promise<any> => {
-    console.log('post: ', req.body)
     try {
       if (!req.body || !req.body.userId || !req.body.orderDetails || !req.body.status)
         throw ReferenceError("Invalid Parameters");
@@ -31,7 +24,6 @@ class Transaction {
     }
   };
   public get = async (req: Request, res: Response): Promise<any> => {
-    console.log('get: ', req.query)
     try {
       if (!req.query || !req.query.userId)
         throw ReferenceError("Invalid Parameters");
