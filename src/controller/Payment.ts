@@ -110,7 +110,7 @@ class Payment {
           isCashierPayment: true,
         },
         paymentReturnUrl: "",
-        paymentNotifyUrl: "https://5da6-119-94-228-188.ap.ngrok.io/v1/payment/notify",
+        paymentNotifyUrl: `${config.BASE_URL}/v1/payment/notify`,
       });
 
       if (result) {

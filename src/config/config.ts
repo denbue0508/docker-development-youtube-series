@@ -20,6 +20,7 @@ export default {
   FIREBASE_DB_URL: process.env.FIREBASE_DB_URL,
   SALT_STRING: process.env.SALT_STRING,
   APP_ID: process.env.APP_ID,
+  BASE_URL: process.env.BASE_URL,
   GCASH_BASE_URL: process.env.GCASH_BASE_URL,
   GCASH_PAYMENT_URL: process.env.GCASH_PAYMENT_URL,
   GCASH_PAYMENT_INQUIRY_URL: process.env.GCASH_PAYMENT_INQUIRY_URL,
