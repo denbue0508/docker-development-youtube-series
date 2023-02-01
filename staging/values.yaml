@@ -2,7 +2,7 @@ replicaCount: 1
 
 parcels-io-deploy:
 
-  parcels-io-dev:
+  parcels-io-staging:
     enabled: true
     imagePullSecrets: []
     podAnnotations: {}
@@ -11,7 +11,7 @@ parcels-io-deploy:
     revisionHistoryLimit: 1
 
     image:
-      repository: nexus3.lastmile.ph:7777/repository/internal/parcels-io-dev
+      repository: nexus3.lastmile.ph:7777/repository/internal/parcels-io-staging
       tag: 1.0.11
       pullPolicy: IfNotPresent
 
