@@ -1,6 +1,6 @@
 import { PaymentTx } from "../model/PaymentTx";
 import { IPaymentTx } from "../interfaces/PaymentTx";
-import * as moment from "moment-timezone";
+import moment from "moment-timezone";
 
 class PaymentDao {
   constructor() {}
