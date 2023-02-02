@@ -19,11 +19,10 @@ RUN yarn install --frozen-lockfile --ignore-scripts
 COPY tsconfig.json ./
 COPY .env ./
 COPY src ./src
-COPY ormconfig.ts ./
 COPY fullchain.pem privkey.pem ./
 
 # build app
-RUN yarn clean && yarn build
+RUN yarn install && yarn build
 
 EXPOSE 8080
-CMD ["yarn", "prod"]
+CMD ["yarn", "start"]
