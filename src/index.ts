@@ -20,7 +20,7 @@ admin.initializeApp({
 if (config.APP === 'beta') {
   const httpsOptions = {
     cert: fs.readFileSync('/app/fullchain.pem'),
-    key: fs.readFileSync('/app/fullchain.pem')
+    key: fs.readFileSync('/app/privkey.pem')
   }
   https.createServer(httpsOptions, app).listen(PORT, () => {
     console.info(`server started on port ${PORT} (${config.APP})`); // eslint-disable-line no-console
