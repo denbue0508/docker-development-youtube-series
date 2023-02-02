@@ -1,12 +1,29 @@
-FROM node:10.13.0
+FROM node:12.22.12-alpine3.15
 
-WORKDIR /aws/src/app
+ENV NODE_VERSION 12.22.1
+ENV HOME /app
+ENV PORT 8080
 
-COPY package*.json ./
+# uncomment this line if you're using localhost as DB_HOST
+# or set host.docker.internal in your env file instead
+# ENV DB_HOST host.docker.internal
 
-RUN npm install
+RUN mkdir -p ${HOME}
 
-COPY . .
+WORKDIR ${HOME}
+
+COPY package.json yarn.lock ./
+
+RUN yarn install --frozen-lockfile --ignore-scripts
+
+COPY tsconfig.json ./
+COPY .env ./
+COPY src ./src
+COPY ormconfig.ts ./
+COPY fullchain.pem privkey.pem ./
+
+# build app
+RUN yarn clean && yarn build
 
 EXPOSE 8080
-CMD ["npm", "run", "prod:run"]
+CMD ["yarn", "prod"]
