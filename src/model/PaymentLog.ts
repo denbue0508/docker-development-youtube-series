@@ -29,7 +29,7 @@ const PaymentLogSchema = Schema(
     },
     refNo: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     status: {
@@ -42,7 +42,7 @@ const PaymentLogSchema = Schema(
     },
     user_id: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   {

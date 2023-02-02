@@ -5,11 +5,10 @@ import * as moment from "moment-timezone";
 class PaymentLogDao {
   constructor() {}
   public saveItem = async (params: IPaymentLog) => {
-    return await new PaymentLog({
+    let payLog = {
       user_id: params.userId,
       partner_id: params.partnerId,
       payment_id: params.paymentId,
-      refNo: params.refNo,
       payment_request_id: params.paymentRequestId,
       payment_amount_currency: params.paymentAmount.currency,
       payment_amount_value: params.paymentAmount.value,
@@ -18,7 +17,12 @@ class PaymentLogDao {
       result_message: params.paymentFailReason,
       createdAt: moment(),
       updateAt: moment(),
-    }).save();
+    }
+
+    if (params?.refNo) {
+      return await new PaymentLog({...payLog, refNo: params.refNo}).save();
+    }
+    return await new PaymentLog(payLog).save();
   };
   public updateItem = async (filter, params: IPaymentLog) => {
     return await PaymentLog.updateOne(filter, {

@@ -39,6 +39,7 @@ class Payment {
       });
     } catch (err) {
       const referenceError = err instanceof ReferenceError ? 400 : 500;
+
       res.status(err instanceof ReferenceError ? 400 : 500).send({
         result: {
           resultCode: referenceError ? "UNKNOWN_EXCEPTION" : "PROCESS_FAIL",
@@ -109,7 +110,7 @@ class Payment {
           isCashierPayment: true,
         },
         paymentReturnUrl: "",
-        paymentNotifyUrl: "",
+        paymentNotifyUrl: `${config.BASE_URL}/v1/payment/notify`,
       });
 
       if (result) {
@@ -118,15 +119,15 @@ class Payment {
           paymentId: result.data.paymentId,
           partnerId: String(partnerId),
           paymentTime,
-          paymentFailReason: "",
           paymentRequestId,
           paymentStatus: "INITIATED",
           paymentAmount: req.body.paymentAmount,
-          refNo: req.body.refNo,
         };
 
         const paymentObj: IPaymentTx = {
           ...paymentLogObj,
+          refNo: req.body.refNo,
+          paymentFailReason: "",
           appId: String(appId),
         };
 
@@ -134,7 +135,7 @@ class Payment {
         const payment: PaymentDao = new PaymentDao();
 
         if (!reqPaymentRequestId) {
-          await paymentLog.saveItem(paymentLogObj);
+          await paymentLog.saveItem({...paymentLogObj, refNo: req.body.refNo});
           await payment.saveItem(paymentObj);
         }
       }
@@ -144,6 +145,7 @@ class Payment {
         result: {
           ...result.data,
           paymentRequestId,
+          paymentId: result.data.paymentId
         },
       });
     } catch (err) {

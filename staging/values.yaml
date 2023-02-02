@@ -1,0 +1,45 @@
+replicaCount: 1
+
+parcels-io-deploy:
+
+  parcels-io-staging:
+    enabled: true
+    imagePullSecrets: []
+    podAnnotations: {}
+    podSecurityContext: {}
+    securityContext: {}
+    revisionHistoryLimit: 1
+
+    image:
+      repository: nexus3.lastmile.ph:7777/repository/internal/parcels-io-staging
+      tag: 1.0.11
+      pullPolicy: IfNotPresent
+
+    service:
+      type: LoadBalancer
+      port: 8080
+      #path: "/api/authorization"
+      targetPort: 8080
+
+    #probe:
+    #  path: /v1/home/status
+    #  port: 8080
+
+
+      
+      #TODO: TO BE MOVED TO envSecrets
+      
+
+    resources: {}
+
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 100
+      targetCPUUtilizationPercentage: 80
+
+    nodeSelector: {}
+
+    tolerations: []
+
+    affinity: {}

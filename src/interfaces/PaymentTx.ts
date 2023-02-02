@@ -1,5 +1,7 @@
+
+        
 export interface IPaymentTx {
-  userId: string;
+  userId?: string;
   partnerId: string;
   refNo: string;
   paymentId: string;
@@ -12,12 +14,12 @@ export interface IPaymentTx {
 }
 
 export interface IPaymentLog {
-  userId: string;
+  userId?: string;
   partnerId: string;
-  refNo: string;
+  refNo?: string;
   paymentId: string;
   paymentTime: string;
-  paymentFailReason: string;
+  paymentFailReason?: string;
   paymentRequestId: string;
   paymentAmount: IPaymentAmount;
   paymentStatus: string;

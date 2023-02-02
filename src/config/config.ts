@@ -6,8 +6,8 @@ export default {
   PORT: process.env.PORT || '3000',
 
   DB_DIALECT: process.env.DB_DIALECT || 'mongo',
-  DB_HOST: process.env.DB_HOST || 'mongodb://localhost:27017/logger',
-  DB_NAME: process.env.DB_NAME || 'logger',
+  DB_HOST: process.env.DB_HOST || 'mongodb://localhost:27017/parcelsdb',
+  DB_NAME: process.env.DB_NAME || 'parcelsdb',
   DB_PASSWORD: process.env.DB_PASSWORD || 'db-password',
   DB_PORT: process.env.DB_PORT || '27017',
   DB_USER: process.env.DB_USER || 'root',
@@ -20,6 +20,7 @@ export default {
   FIREBASE_DB_URL: process.env.FIREBASE_DB_URL,
   SALT_STRING: process.env.SALT_STRING,
   APP_ID: process.env.APP_ID,
+  BASE_URL: process.env.BASE_URL,
   GCASH_BASE_URL: process.env.GCASH_BASE_URL,
   GCASH_PAYMENT_URL: process.env.GCASH_PAYMENT_URL,
   GCASH_PAYMENT_INQUIRY_URL: process.env.GCASH_PAYMENT_INQUIRY_URL,
