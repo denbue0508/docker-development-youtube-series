@@ -1,9 +1,9 @@
 import { PaymentTx } from "../model/PaymentTx";
 import { IPaymentTx } from "../interfaces/PaymentTx";
-import * as moment from "moment-timezone";
+import moment from "moment-timezone";
 
 class PaymentDao {
-  constructor() {}
+  constructor() { }
   public updateStatus = async (filter: any, status: string) => {
     await PaymentTx.updateOne(filter, {
       updatedAt: moment(),

@@ -1,9 +1,9 @@
 import { PaymentLog } from "../model/PaymentLog";
 import { IPaymentLog } from "../interfaces/PaymentTx";
-import * as moment from "moment-timezone";
+import moment from "moment-timezone";
 
 class PaymentLogDao {
-  constructor() {}
+  constructor() { }
   public saveItem = async (params: IPaymentLog) => {
     let payLog = {
       user_id: params.userId,
