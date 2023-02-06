@@ -1,6 +1,6 @@
 import { Transaction } from "../model/Transaction";
 import { ITransaction } from "../interfaces/Transaction";
-import * as moment from "moment-timezone";
+import moment from "moment-timezone";
 
 class TransactionDao {
   constructor() {}

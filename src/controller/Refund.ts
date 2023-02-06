@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import config from "../config/config";
-import * as moment from "moment-timezone";
+import moment from "moment-timezone";
 import GcashService from "../service/Gcash";
 
 class Refund {

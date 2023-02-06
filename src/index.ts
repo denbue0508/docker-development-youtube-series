@@ -1,7 +1,7 @@
 import app from './App';
 import config from './config/config';
 import './config/db';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 
 const PORT = config.PORT;
 const https = require('https');

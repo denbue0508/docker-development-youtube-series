@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import PaymentLogDao from "../dao/PaymentLog";
 import PaymentDao from "../dao/Payment";
 import config from "../config/config";
-import * as moment from "moment-timezone";
+import moment from "moment-timezone";
 import { IPaymentLog, IPaymentTx } from "../interfaces/PaymentTx";
 
 import GcashService from "../service/Gcash";
