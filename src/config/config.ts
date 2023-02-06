@@ -18,6 +18,7 @@ export default {
   SECRET_TOKEN: process.env.ENV_SECRET,
   ENV_GET_KEY: process.env.ENV_GET_KEY,
   FIREBASE_DB_URL: process.env.FIREBASE_DB_URL,
+  FIREBASE_STORAGE_BUCKET: process.env.FIREBASE_STORAGE_BUCKET,
   SALT_STRING: process.env.SALT_STRING,
   APP_ID: process.env.APP_ID,
   BASE_URL: process.env.BASE_URL,

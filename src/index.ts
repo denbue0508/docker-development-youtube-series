@@ -15,7 +15,7 @@ moment.tz.setDefault('Asia/manila');
 admin.initializeApp({
   credential: admin.credential.cert(instance),
   databaseURL: config.FIREBASE_DB_URL,
-  storageBucket: "gs://fleet-staging-2333a.appspot.com/"
+  storageBucket: config.FIREBASE_STORAGE_BUCKET
 });
 
 if (config.APP === 'beta') {
