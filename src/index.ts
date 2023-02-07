@@ -14,7 +14,8 @@ moment.tz.setDefault('Asia/manila');
 
 admin.initializeApp({
   credential: admin.credential.cert(instance),
-  databaseURL: config.FIREBASE_DB_URL
+  databaseURL: config.FIREBASE_DB_URL,
+  storageBucket: config.FIREBASE_STORAGE_BUCKET
 });
 
 if (config.APP === 'beta') {

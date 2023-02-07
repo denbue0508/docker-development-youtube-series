@@ -48,6 +48,7 @@ class Gcash {
         if (res.data.result.resultStatus === 'F') {
             throw new ReferenceError(res.data.result.resultMessage)
         }
+
         return res
     }
 

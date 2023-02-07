@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import config from "../config/config";
 import moment from "moment-timezone";
 import GcashService from "../service/Gcash";
+import { updateRefundAttempt, updateRefundStatus } from "../dao/Firebase";
 
 class Refund {
   private partnerId = config.REFERENCE_PARTNER_ID;
@@ -54,7 +55,7 @@ class Refund {
         !req.body.refundReason
       ) throw ReferenceError("Invalid Parameter");
 
-      const { paymentId, paymentRequestId, refundAmount, refundReason } = req.body;
+      const { paymentId, paymentRequestId, refundAmount, refundReason, postId } = req.body;
 
       const currentTimeStamp = `${moment().valueOf()}`;
       const refundRequestId = `${currentTimeStamp}${paymentRequestId}`;
@@ -71,6 +72,14 @@ class Refund {
         refundReason,
         extendInfo
       });
+
+      if (result.data.result.resultStatus === 'F') {
+        await updateRefundAttempt(postId)
+      }
+
+      if (result.data.result.resultStatus === 'S') {
+        await updateRefundStatus(postId)
+      }
 
       res.status(200).send({
         success: result.data.resultStatus === 'S',

@@ -3,7 +3,7 @@ import { IPaymentLog } from "../interfaces/PaymentTx";
 import moment from "moment-timezone";
 
 class PaymentLogDao {
-  constructor() {}
+  constructor() { }
   public saveItem = async (params: IPaymentLog) => {
     let payLog = {
       user_id: params.userId,

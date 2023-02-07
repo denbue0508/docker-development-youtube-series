@@ -3,7 +3,7 @@ import { IPaymentTx } from "../interfaces/PaymentTx";
 import moment from "moment-timezone";
 
 class PaymentDao {
-  constructor() {}
+  constructor() { }
   public updateStatus = async (filter: any, status: string) => {
     await PaymentTx.updateOne(filter, {
       updatedAt: moment(),
