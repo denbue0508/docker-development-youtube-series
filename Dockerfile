@@ -19,7 +19,7 @@ RUN yarn install --frozen-lockfile --ignore-scripts
 COPY tsconfig.json ./
 #COPY .env ./
 COPY src ./src
-COPY fullchain.pem privkey.pem ./
+#COPY fullchain.pem privkey.pem ./
 
 # build app
 RUN yarn install && yarn build
