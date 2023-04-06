@@ -17,7 +17,7 @@ COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile --ignore-scripts
 
 COPY tsconfig.json ./
-COPY .env ./
+#COPY .env ./
 COPY src ./src
 COPY fullchain.pem privkey.pem ./
 
