@@ -8,8 +8,8 @@ node_modules/
 dist/
 
 # Project related
-firebase.json
-.env
+#firebase.json
+#.env
 
 # Compiled Java class files
 *.class
